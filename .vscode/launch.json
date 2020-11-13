@@ -16,7 +16,7 @@
 			"request": "launch",
 			"cwb": "${workspaceRoot}",
 			"name": "P12127",
-			"smartclientBin": "/Users/sidneysantos/TOTVS/SmartClient/smartclient.app/Contents/MacOS/smartclient",
+			"smartclientBin": "/Users/sidneysantos/TOTVS/smartclient/smartclient.exe",
 			"program": "${command:AskForProgramName}",
 			"enableMultiThread": false,
 			"enableProfile": false,
@@ -54,5 +54,5 @@
 			"description": ""
 		}
 	],
-	"lastProgramExecuted": "SIGAESP"
+	"lastProgramExecuted": "sigamdi"
 }

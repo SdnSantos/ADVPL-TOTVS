@@ -1,0 +1,38 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTButton
+  Aprendendo a usar o zTButton
+  @type  User Function
+  @author Sidney Santos
+  @since 12/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew  
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TButton%3ANew 
+  @see https://tdn.totvs.com.br/display/tec/Activate
+  /*/
+User Function zTButton()
+   
+  Local oDlgTela 
+  Local cTituloJanela := 'Utilitários do Protheus'
+  Local oBtnClientes
+  Local oBtnFornecedores
+  Local oBtnBancos
+  Local oBtnProdutos
+  Local oBtnFechar
+
+  oDlgTela          := TDialog():New(180,180,550,700,cTituloJanela,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oBtnClientes      := TButton():New( 025, 025, "Clientes",oDlgTela,{||Mata030()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oBtnFornecedores  := TButton():New( 050, 050, "Fornecedores",oDlgTela,{||Mata020()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oBtnBancos        := TButton():New( 075, 075, "Bancos",oDlgTela,{||Mata070()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oBtnProdutos      := TButton():New( 100, 100, "Produtos",oDlgTela,{||Mata010()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oBtnFechar        := TButton():New( 125, 125, "Fechar",oDlgTela,{||oDlgTela:End()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oDlgTela:Activate(,,,)
+
+Return 

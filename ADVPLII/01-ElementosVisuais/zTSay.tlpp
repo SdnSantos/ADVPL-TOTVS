@@ -1,0 +1,47 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTSay
+  Aprendendo a usar o zTSay
+  @type  User Function
+  @author Sidney Santos
+  @since 12/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TSay%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TButton%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Activate
+  /*/
+User Function zTSay()
+   
+  Local oDlgTela 
+  Local cTituloJanela := 'Utilitários do Protheus'
+  Local oLblClientes
+  Local oBtnClientes
+  Local oLblFornecedores
+  Local oBtnFornecedores
+  Local oLblBancos
+  Local oBtnBancos
+  Local oLblProdutos
+  Local oBtnProdutos
+  Local oBtnFechar
+
+  oDlgTela          := TDialog():New(180,180,550,700,cTituloJanela,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+  
+  oLblClientes      := TSay():New(015, 015,{||'Aperte no botão para acessar o Cadastro de Clientes'},oDlgTela,,oFont,,,,.T.,CLR_RED,CLR_WHITE,200,20)  
+  oBtnClientes      := TButton():New( 025, 025, "Clientes",oDlgTela,{||Mata030()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oLblFornecedores  := TSay():New(040, 030,{||'Aperte no botão para acessar o Cadastro de Fornecedores'},oDlgTela,,oFont,,,,.T.,CLR_BLUE,CLR_WHITE,200,20)
+  oBtnFornecedores  := TButton():New( 050, 050, "Fornecedores",oDlgTela,{||Mata020()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oLblBancos        := TSay():New(065, 065,{||'Aperte no botão para acessar o Cadastro de Bancos'},oDlgTela,,oFont,,,,.T.,CLR_GREEN,CLR_WHITE,200,20)
+  oBtnBancos        := TButton():New( 075, 075, "Bancos",oDlgTela,{||Mata070()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oLblProdutos      := TSay():New(090, 090,{||'Aperte no botão para acessar o Cadastro de Produtos'},oDlgTela,,oFont,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
+  oBtnProdutos      := TButton():New( 100, 100, "Produtos",oDlgTela,{||Mata010()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oBtnFechar        := TButton():New( 125, 125, "Fechar",oDlgTela,{||oDlgTela:End()}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oDlgTela:Activate(,,,)
+
+Return 

@@ -1,0 +1,57 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+#INCLUDE 'FWMVCDef.ch'
+
+/*/{Protheus.doc} User Function zTFont
+  Aprendendo a usar o TFont
+  @type  User Function
+  @author Sidney Santos
+  @since 13/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TSay%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TButton%3ANew
+  @see https://tdn.totvs.com.br/display/tec/TFont%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Activate
+  /*/
+User Function zTFont()
+   
+  Local oDlgTela 
+  Local cTituloJanela := 'Utilitários do Protheus'
+
+  Local oLblClientes
+  Local oLblFornecedores
+  Local oLblBancos
+  Local oLblProdutos
+
+  Local oBtnClientes  
+  Local oBtnFornecedores 
+  Local oBtnBancos  
+  Local oBtnProdutos
+  Local oBtnFechar
+
+  Local oFontLbl
+  Local oFontBtn
+
+  oDlgTela          := TDialog():New(180,180,550,900,cTituloJanela,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oFontLbl          := TFont():New('Comic Sans MS',,18,,.T.,,,,,.T.,.T.)
+  oFontBtn          := TFont():New('Arial Black',,16,,.F.,,,,,.F.,.F.)
+  
+  oLblClientes      := TSay():New(010, 010,{||'Aperte no botão para acessar o Cadastro de Clientes'},oDlgTela,,oFontLbl,,,,.T.,CLR_RED,CLR_WHITE,200,20)
+  oBtnClientes      := TButton():New(025,025,"Clientes",oDlgTela,{||Mata030()},40,10,,oFontBtn,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oLblFornecedores  := TSay():New(045, 045,{||'Aperte no botão para acessar o Cadastro de Fornecedores'},oDlgTela,,oFontLbl,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+  oBtnFornecedores  := TButton():New(060,060,"Fornecedores",oDlgTela,{||Mata020()},60,10,,oFontBtn,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oLblBancos        := TSay():New(080, 080,{||'Aperte no botão para acessar o Cadastro de Bancos'},oDlgTela,,oFontLbl,,,,.T.,CLR_GREEN,CLR_WHITE,200,20)
+  oBtnBancos        := TButton():New(095,095,"Bancos",oDlgTela,{||Mata070()},40,10,,oFontBtn,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oLblProdutos      := TSay():New(115, 115,{||'Aperte no botão para acessar o Cadastro de Produtos'},oDlgTela,,oFontLbl,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
+  oBtnProdutos      := TButton():New(130,130,"Produtos",oDlgTela,{||Mata010()},40,10,,oFontBtn,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oBtnFechar        := TButton():New(170,150,"Fechar",oDlgTela,{||oDlgTela:End()},40,10,,oFontBtn,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oDlgTela:Activate(,,,)
+
+Return 

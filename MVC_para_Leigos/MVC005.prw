@@ -43,8 +43,8 @@ Return ()
 Static Function ModelDef()
 
   // Cria a estrutura a ser usada no Modelo de Dados
-  Local oStruZZA := FWFormStruct(1, "ZZA")
-  Local oStruZZD := FWFormStruct(1, "ZZD")
+  Local oStruZZA := FWFormStruct(1, "ZZA") // PAI
+  Local oStruZZD := FWFormStruct(1, "ZZD") // FILHA
 
   // Cria o objeto do Modelo de Dados
   Local oModel := MPFormModel():New("MVC005_M" ,;
@@ -61,7 +61,7 @@ Static Function ModelDef()
       /* bCarga */        ; // carga de dados    
     )
 
-  //Relacionamento das tabelas
+  // Criacao do segundo componente da tela, componente FILHA
   oModel:AddGrid("ZZDFILHA", "ZZAPAI", oStruZZD ,;
       /* bLinePre */  ,;
       /* bPreVal */   ,;
@@ -69,18 +69,23 @@ Static Function ModelDef()
       /* bLoad */     ;     
     )
 
+  // Relacionamento das tabelas
+  // Sempre inicia pela FILHA
+  // SetRelation("Modelo", {{chaves}, {chaves}}, Indice_Ordenacao)
   oModel:SetRelation("ZZDFILHA", {{ "ZZD_FILIAL", "xFilial('ZZA')" }, { "ZZD_TECNIC", "ZZA_COD" } }, ZZD->(IndexKey(1)) )
   
   // Adiciona a chave primaria ao Modelo de Dados
   oModel:SetPrimaryKey({ "ZZA_FILIAL", "ZZA_COD" })
 
   // Adiciona a descricao do Modelo de Dados
-  oModel:SetDescription("Chamado por Técnico")
+  oModel:SetDescription("Chamado por Tecnico")
 
   // Adiciona a descricao do Componente do Modelo de Dados
-  oModel:GetModel("ZZAPAI"):SetDescription("Chamados por Técnico")
-
+  oModel:GetModel("ZZAPAI"):SetDescription("Tecnicos")
+  oModel:GetModel("ZZDFILHA"):SetDescription("Chamados")
+  
   oModel:GetModel("ZZDFILHA"):SetOptional(.T.)
+
   oModel:SetActivate()
 
 // Retorna o Modelo de dados
@@ -91,6 +96,7 @@ Return oModel
 Static Function ViewDef()
 
   // Cria um objeto de Modelo de Dados baseado no ModelDef() do fonte
+  // Relaciona a View ao Model
   Local oModel    := FWLoadModel("MVC005")
 
   // Cria a estrutura a ser usada na View
