@@ -52,6 +52,20 @@
 			"args": [],
 			"label": "SIGAESP",
 			"description": ""
+		},
+		{
+			"args": [
+				"()"
+			],
+			"label": "U_zTget",
+			"description": "()"
+		},
+		{
+			"args": [
+				" ()"
+			],
+			"label": "U_zTget",
+			"description": " ()"
 		}
 	],
 	"lastProgramExecuted": "sigamdi"

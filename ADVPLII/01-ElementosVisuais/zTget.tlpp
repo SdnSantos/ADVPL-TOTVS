@@ -1,0 +1,43 @@
+#INCLUDE 'TOTVS.CH'
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTget
+  Demonstracao da criacao do Tget
+  @type  User Function
+  @author Sidney
+  @since 13/11/2020
+  @version 1.0
+  @see
+  /*/
+User Function zTget()
+
+  Local oDlgScreen
+
+  Local oSayName
+
+  Local oBtn
+
+  Local oTGetName
+  Local oTGetAddress
+
+  Local aSize         := MsAdvSize()
+
+  Local cTitleScreen  := 'Learning using the TGET'
+  Local cTGetName     := Space(30)
+  Local cTGetAddress  := Space(100)
+
+  oDlgScreen          := TDialog():New(aSize[7],aSize[1],aSize[6],aSize[5],cTitleScreen,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oSayName            := TSay():New(010,010,{||'Enter your name:'},oDlgScreen,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetName           := TGet():New(030,010,{|u|IIF(Pcount()>0,cTGetName:=u,cTGetName)},oDlgScreen,096,009,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGetName,,,,)
+
+  oSayAddress         := TSay():New(010,200,{||'Enter your address:'},oDlgScreen,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetAddress        := TGet():New(030,200,{|u|IIF(Pcount()>0,cTGetAddress:=u,cTGetAddress)},oDlgScreen,096,009,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGetAddress,,,,)
+
+  oBtn                := TButton():New(050,010,"Show Content",oDlgScreen,{||MsgInfo(Alltrim(cTGetName) + " - " + Alltrim(cTGetAddress),"Typed Content")},60,15,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oDlgScreen:Activate(,,,.F.)
+
+Return
