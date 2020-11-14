@@ -1,0 +1,59 @@
+#INCLUDE 'TOTVS.CH'
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTget
+  Demonstracao da criacao do Tget
+  @type  User Function
+  @author Sidney
+  @since 13/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/pages/viewpage.action?pageId=23889301
+  @see https://tdn.totvs.com/pages/viewpage.action?pageId=24347041
+  /*/
+User Function zTGet2()
+
+  Local oDlgScreen
+  Local oSayCodCli
+  Local oSayStore
+  Local oBtnBlocker
+
+  Local oTGetCodCli
+  Local oTGetStore
+
+  Local cTitleScreen  := 'CUSTOMER BLOCKER'
+  Local cTGetCodCli   := Space(6)
+  Local cTGetStore    := Space(2)
+
+
+  oDlgScreen          := TDialog():New(000,000,200,500,cTitleScreen,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oSayCodCli          := TSay():New(030,020,{||'Client:'},oDlgScreen,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetCodCli         := TGet():New(027,050,{ |u| IIF(Pcount()>0, cTGetCodCli:=u, cTGetCodCli) },oDlgScreen,030,010,,,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGetCodCli,,,,)
+  oTGetCodCli:cF3     := "SA1"
+
+  oSayStore           := TSay():New(030,100,{||'Store:'},oDlgScreen,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetStore          := TGet():New(027,130,{ |u| IIF(Pcount()>0, cTGetStore:=u, cTGetStore) },oDlgScreen,030,010,,,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGetStore,,,,)
+
+  oBtnBlocker         := TButton():New(070,020,"Blocker Now?",oDlgScreen,{ ||fBlock(cTGetCodCli, cTGetStore) },60,15,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oDlgScreen:Activate(,,,.T.)
+
+Return
+
+/*/{Protheus.doc} fBlock
+/*/
+Static Function fBlock(cCodCli, cStore)
+
+  DbSelectArea("SA1")
+  SA1->(DbSeek(xFilial("SA1")+cCodCli+cStore))
+
+    // .T. para inclusao
+    // .F. para alteracao
+    RecLock("SA1", .F.)
+      SA1->A1_MSBLQL := "1"
+    MsUnlock()
+
+    MsgInfo("O cliente com código " + cCodCli + " e loja " + cStore + " está sendo bloqueado!", "Atenção")
+Return

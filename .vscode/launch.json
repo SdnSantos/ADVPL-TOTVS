@@ -66,6 +66,20 @@
 			],
 			"label": "U_zTget",
 			"description": " ()"
+		},
+		{
+			"args": [
+				"()"
+			],
+			"label": "U_zTGet2",
+			"description": "()"
+		},
+		{
+			"args": [
+				" ()"
+			],
+			"label": "U_zTGet2",
+			"description": " ()"
 		}
 	],
 	"lastProgramExecuted": "sigamdi"
