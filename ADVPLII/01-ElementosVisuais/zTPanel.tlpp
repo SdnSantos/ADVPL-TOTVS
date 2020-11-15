@@ -1,0 +1,32 @@
+#INCLUDE 'PROTHEUS.CH'
+#INCLUDE 'TOTVS.CH'
+
+/*/{Protheus.doc} User Function zTPanel
+  (long_description)
+  @type  User Function
+  @author Sidney Santos
+  @since 15/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/Construtor+TPanel%3ANew
+  /*/
+User Function zTPanel()
+
+  Local oTDlgScreen
+  Local oTPanel
+  Local oTSay
+  Local oTGet
+  Local oTFont    := TFont():New('Courier new',,20,.T.)
+
+  Local cTGet     := Space(60)
+
+  oTDlgScreen   := TDialog():New(000,000,300,300,'TPanel',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oTPanel       := tPanel():New(010,010,,oTDlgScreen,,.T.,,CLR_YELLOW,CLR_BLUE,125,125)
+
+  oTSay         := TSay():New(010,010,{||'Input yout name: '},oTPanel,,oTFont,,,,.T.,CLR_WHITE,CLR_WHITE,080,015)
+
+  oTGet         := TGet():New(030,010,{ || cTGet},oTPanel,100,015,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGet,,,, )
+
+  oTDlgScreen:Activate(,,,)
+
+Return

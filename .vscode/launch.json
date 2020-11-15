@@ -80,7 +80,21 @@
 			],
 			"label": "U_zTGet2",
 			"description": " ()"
+		},
+		{
+			"args": [
+				"()"
+			],
+			"label": "u_ztpanel",
+			"description": "()"
+		},
+		{
+			"args": [
+				" ()"
+			],
+			"label": "u_ztpanel",
+			"description": " ()"
 		}
 	],
-	"lastProgramExecuted": "SIGAESP"
+	"lastProgramExecuted": "u_ztpanel"
 }
