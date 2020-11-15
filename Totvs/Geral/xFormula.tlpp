@@ -1,0 +1,75 @@
+#Include 'Totvs.ch'
+#Include 'Protheus.ch'
+#Include 'ParmType.ch'
+
+//+------------+------------+--------+--------------------------------------------+
+
+//| Função:    | xFormula   | Autor: | David Alves dos Santos                     |
+
+//+------------+------------+--------+--------------------------------------------+
+
+//| Descrição: | Rotina para execução de funções dentro do Protheus.              |
+
+//+------------+------------------------------------------------------------------+
+
+//|------------------------> SigaMDI.net - Cursos Online <------------------------|
+
+//+-------------------------------------------------------------------------------+
+
+
+User Function xFormula()
+		
+
+//-> Declaração de variaveis
+	
+Local bError 
+	
+Local oTDlgTela := Nil
+	
+Local oTSayFunction := Nil
+
+Local cTGetFunction := PadR("Ex.: u_NomeFuncao() ", 300)	
+
+Local oTGetFunction := Nil
+
+Local oTBtnExec := Nil	
+Local oTBtnExit := Nil
+
+Local oTFont		:= TFont():New('Comic Sans MS',,20,,.F.,,,,,.F.,.F.)
+Local oTFontN		:= TFont():New('Comic Sans MS',,20,,.T.,,,,,.F.,.T.)
+	
+	//-> Recupera e/ou define um bloco de código para ser avaliado quando ocorrer um erro em tempo de execução.
+	
+	bError := ErrorBlock( { |e| cError := e:Description } )
+	//, Break(e) } )
+		
+	//-> Inicia sequencia
+	BEGIN SEQUENCE	
+			
+		//-> Construção da interface.		
+		oTDlgTela 		:= MSDialog():New(000,000,200,700,"FORMULAS",,,.F.,,,,,,.T.,,,.T.)
+		
+		//-> Rotulo
+		oTSayFunction := TSay():New(008,015,{ || "Informe a sua funcao aqui:" },oTDlgTela,,oTFont,.F.,.F.,.F.,.T.,CLR_BLACK,CLR_WHITE,150,015)
+				
+		//-> Campo	
+		oTGetFunction := TGet():New(030,015,{ | u | If( PCount() == 0,cTGetFunction,cTGetFunction:=u) },oTDlgTela,300,015,'!@',,CLR_BLACK,CLR_WHITE,oTFont,,,.T.,"",,,.F.,.F.,,.F.,.F.,"","cTGetFunction",,)
+				
+		//-> Botoes			
+		oTBtnExec 		:= TButton():New(060,015,"Executar",oTDlgTela, ;
+		{ || &(cTGetFunction) },050,020,,oTFont,,.T.,,"",,,,.F. )
+		
+		oTBtnExit 		:= TButton():New(060,120,"Sair",oTDlgTela,{ || oTDlgTela:End() },050,020,,oTFont,,.T.,,"",,,,.F.)
+				
+		//-> Ativacao da interface	    
+		oTDlgTela:Activate(,,,.T.)
+			
+	RECOVER	
+		
+		//-> Recupera e apresenta o erro		
+		ErrorBlock( bError )		
+		MsgStop( cError )	
+		
+	END SEQUENCE
+
+Return()

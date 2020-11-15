@@ -1,0 +1,80 @@
+#INCLUDE 'PROTHEUS.CH'
+#INCLUDE 'TOTVS.CH'
+
+/*/{Protheus.doc} nomeFunction
+  (long_description)
+  @type  User Function
+  @author Sidney Santos
+  @since 14/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/TGroup
+  /*/
+User Function zTGroup()
+
+  Local oTDlg
+  Local cTitleScreen := 'Elemento TGroup com TGet'
+  Local oTGroup1
+  Local oTGroup2
+
+  Local oTBtnGroup1
+  Local oTBtnGroup2
+
+  Local oSayName1, oSayName2
+  Local oSayLastName1, oSayLastName2
+
+  Private oTGetName1, oTGetName2
+  Private oTGetLastName1, oTGetLastName2
+
+  Private cTGetName1      := Space(30)
+  Private cTGetName2      := Space(30)
+  Private cTGetLastName1  := Space(30)
+  Private cTGetLastName2  := Space(30)
+
+
+
+  oTDlg          := TDialog():New(000,000,410,410,cTitleScreen,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oTGroup1       := TGroup():New(010,010,100,200,'Group 1',oTDlg,,,.T.)
+
+  oSayName1      := TSay():New(025,020,{||'Enter your name:'},oTGroup1,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetName1     := TGet():New(035,020,{ |u|IIF(Pcount()>0,cTGetName1:=u,cTGetName1)},oTGroup1,096,009,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGetName1,,,,)
+
+  oSayLastName1  := TSay():New(050,020,{||'Enter your lastname:'},oTGroup1,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetLastName1 := TGet():New(060,020,{ |u|IIF(Pcount()>0,cTGetLastName1:=u,cTGetLastName1)},oTGroup1,096,009,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGetLastName1,,,,)
+
+  oTBtnGroup1     := TButton():New(080,020,"Send",oTGroup1,{||fSendGets()},60,15,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTGroup2       := TGroup():New(110,010,200,200,'Group 2',oTDlg,,,.T.)
+
+  oSayName2      := TSay():New(125,020,{||'Receive your name:'},oTGroup2,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetName2     := TGet():New(135,020,{ |u| IIF(Pcount()>0,cTGetName2:=u,cTGetName2)},oTGroup2,096,009,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.T.,.F.,,cTGetName2,,,,)
+
+  oSayLastName2  := TSay():New(150,020,{||'Receive your lastname:'},oTGroup2,,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+
+  oTGetLastName2 := TGet():New(160,020,{ |u| IIF(Pcount()>0,cTGetLastName2:=u,cTGetLastName2)},oTGroup2,096,009,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.T.,.F.,,cTGetLastName2,,,,)
+
+  oTBtnGroup2     := TButton():New(180,020,"EXIT",oTGroup2,{|| oTDlg:End()},60,15,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTDlg:Activate(,,,.T.)
+
+Return
+
+/*/{Protheus.doc} fSendGets
+ Esta Static Function realiza a atualizacao dos gets do segundo grupo
+@type function
+@version
+@author sidneysantos
+@since 11/15/2020
+/*/
+Static Function fSendGets()
+
+  cTGetName2        := cTGetName1
+  cTGetLastName2    := cTGetLastName1
+
+  oTGetName2:Refresh()
+  oTGetLastName2:Refresh()
+
+Return
