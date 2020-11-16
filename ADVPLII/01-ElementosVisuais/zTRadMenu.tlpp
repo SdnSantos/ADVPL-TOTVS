@@ -1,0 +1,30 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTRadMenu
+  TFolder
+  @type  User Function
+  @author user
+  @since 15/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/TRadMenu%3ANew
+  /*/
+User Function zTRadMenu()
+
+Local oTDlgScreen
+Local oTRadio
+Local oTBtnExec
+
+Local aItems      := {'Masculino','Feminino','Outros'}
+Local nTRadio     := 1
+
+
+  oTDlgScreen     := TDialog():New(000,000,300,300,'TRadMenu',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oTRadio         := TRadMenu():New (020,020,aItems,,oTDlgScreen,,,,,,,,100,12,,,,.T.)
+  oTRadio:bSetGet := { |u| IIF(PCount()==0,nTRadio,nTRadio:=u) }
+  oTBtnExec       := TButton():New(100,020,"Executar",oTDlgScreen,{||alert(aItems[nTRadio])},040,010,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTDlgScreen:Activate(,,,)
+
+Return

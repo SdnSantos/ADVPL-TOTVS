@@ -99,7 +99,12 @@
 			"args": [],
 			"label": "u_ztfolder",
 			"description": ""
+		},
+		{
+			"args": [],
+			"label": "u_ztradmenu",
+			"description": ""
 		}
 	],
-	"lastProgramExecuted": "u_ztfolder"
+	"lastProgramExecuted": "u_ztradmenu"
 }
