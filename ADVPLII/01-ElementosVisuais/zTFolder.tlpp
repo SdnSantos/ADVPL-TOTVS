@@ -1,0 +1,56 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTFolder
+  TFolder
+  @type  User Function
+  @author user
+  @since 15/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/TFolder
+  /*/
+User Function zTFolder()
+
+Local oTDlgScreen
+Local oTFolder
+Local oTSay1, oTSay2, oTSay3
+Local oTGet1, oTGet2, oTGet3
+Local oTBtn1, oTBtn2, oTBtn3
+Local oTBtnExit1, oTBtnExit2, oTBtnExit3
+
+Local cTGet1, cTGet2, cTGet3
+
+Local aTFolder  := {"TAB 01", "TAB 02", "TAB 03"}
+
+  oTDlgScreen   := TDialog():New(000,000,500,500,'Tab Panel',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oTFolder      := TFolder():New(010,010,aTFolder,aTFolder,oTDlgScreen,,,,.T.,,233,230)
+
+  // Insere um TGet em cada aba da folder
+  oTSay1        := TSay():New(0015,010,{||'TAB 01'},oTFolder:aDialogs[1],,,,,,.T.,CLR_RED,CLR_BLACK,200,20)
+  cTGet1        := Space(30)
+  oTGet1        := TGet():New(030,010,{ |u| IIF(Pcount()>0,cTGet1:=u,cTGet1)},oTFolder:aDialogs[1],096,009,;
+    "",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGet1,,,, )
+  oTBtn1        := TButton():New(050,010,"Executar",oTFolder:aDialogs[1],{||alert(cTGet1)}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTSay2        := TSay():New(0015,010,{||'TAB 02'},oTFolder:aDialogs[2],,,,,,.T.,CLR_RED,CLR_BLACK,200,20)
+  cTGet2        := Space(30)
+  oTGet2        := TGet():New(030,010,{ |u| IIF(Pcount()>0,cTGet2:=u,cTGet2) },oTFolder:aDialogs[2],096,009,;
+    "",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGet2,,,, )
+  oTBtn2        := TButton():New(050,010,"Executar",oTFolder:aDialogs[2],{||alert(cTGet2)},40,10,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTSay3        := TSay():New(0015,010,{||'TAB 03'},oTFolder:aDialogs[3],,,,,,.T.,CLR_RED,CLR_BLACK,200,20)
+  cTGet3        := Space(30)
+  oTGet3        := TGet():New(030,010,{ |u| IIF(Pcount()>0,cTGet3:=u,cTGet3) },oTFolder:aDialogs[3],096,009,;
+    "",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cTGet3,,,, )
+  oTBtn3        := TButton():New(050,010,"Executar",oTFolder:aDialogs[3],{||alert(cTGet3)},40,10,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+  oTBtnExit1     := TButton():New(200,185,"Exit",oTFolder:aDialogs[1],{||oTDlgScreen:End() },040,013,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTBtnExit2     := TButton():New(200,185,"Exit",oTFolder:aDialogs[2],{||oTDlgScreen:End() },040,013,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTBtnExit3     := TButton():New(200,185,"Exit",oTFolder:aDialogs[3],{||oTDlgScreen:End() },040,013,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTDlgScreen:Activate()
+
+Return
