@@ -1,0 +1,29 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTComboBox
+  TFolder
+  @type  User Function
+  @author user
+  @since 15/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/TComboBox%3ANew
+  /*/
+User Function zTComboBox()
+
+Local oTDlgScreen
+Local oTCombo
+Local oTBtnExit
+
+Local aItems    := {'Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'}
+Local cTCombo   := aItems[10]
+
+oTDlgScreen     := TDialog():New(000,000,300,300,'TRadMenu',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+oTCombo         := TComboBox():New(010,020,{ |u| IIF(PCount()>0,cTCombo:=u,cTCombo)},aItems,100,20,oTDlgScreen,,{ || Alert('Mudou para mês de ' + cTCombo )},,,,.T.,,,,,,,,,'TcCombo')
+
+oTBtnExit       := TButton():New(040,020,"Exit",oTDlgScreen,{|| oTDlgScreen:End() },100,020,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+oTDlgScreen:Activate(,,,)
+
+Return

@@ -104,7 +104,17 @@
 			"args": [],
 			"label": "u_ztradmenu",
 			"description": ""
+		},
+		{
+			"args": [],
+			"label": "u_ztcombobox",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "u_ztgroup",
+			"description": ""
 		}
 	],
-	"lastProgramExecuted": "u_ztradmenu"
+	"lastProgramExecuted": "u_ztgroup"
 }
