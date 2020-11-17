@@ -1,10 +1,10 @@
 #INCLUDE 'TOTVS.CH'
 #INCLUDE 'PROTHEUS.CH'
 
-/*/{Protheus.doc} User Function zTget
-  Demonstracao da criacao do Tget
+/*/{Protheus.doc} User Function zTGet
+  Demonstracao da criacao do TGet
   @type  User Function
-  @author Sidney
+  @author Sidney Santos
   @since 13/11/2020
   @version 1.0
   @see

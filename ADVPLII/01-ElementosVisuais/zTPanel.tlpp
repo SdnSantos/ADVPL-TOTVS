@@ -2,7 +2,7 @@
 #INCLUDE 'TOTVS.CH'
 
 /*/{Protheus.doc} User Function zTPanel
-  (long_description)
+  TPanel
   @type  User Function
   @author Sidney Santos
   @since 15/11/2020

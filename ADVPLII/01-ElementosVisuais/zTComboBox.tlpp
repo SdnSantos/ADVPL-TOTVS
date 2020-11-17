@@ -2,9 +2,9 @@
 #INCLUDE 'PROTHEUS.CH'
 
 /*/{Protheus.doc} User Function zTComboBox
-  TFolder
+  TComboBox
   @type  User Function
-  @author user
+  @author Sidney Santos
   @since 15/11/2020
   @version 1.0
   @see https://tdn.totvs.com/display/tec/TComboBox%3ANew

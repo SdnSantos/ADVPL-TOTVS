@@ -2,18 +2,18 @@
 #INCLUDE 'PROTHEUS.CH'
 
 /*/{Protheus.doc} User Function zTDialog
-  Aprendendo a usar o zTDialog
+  Aprendendo a usar o TDialog
   @type  User Function
   @author Sidney Santos
   @since 12/11/2020
   @version 1.0
-  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew  
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew
   @see https://tdn.totvs.com.br/display/tec/Activate
   /*/
 User Function zTDialog()
-  
+
   Local oDlg1 := TDialog():New(180,180,550,700,'Cadastro de Protheuzeiro',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
 
   oDlg1:Activate(,,,)
 
-Return 
+Return

@@ -1,8 +1,8 @@
 #INCLUDE 'PROTHEUS.CH'
 #INCLUDE 'TOTVS.CH'
 
-/*/{Protheus.doc} nomeFunction
-  (long_description)
+/*/{Protheus.doc} zTGroup
+  TGroup
   @type  User Function
   @author Sidney Santos
   @since 14/11/2020

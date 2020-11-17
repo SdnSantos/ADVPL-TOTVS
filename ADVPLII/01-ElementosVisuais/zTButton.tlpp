@@ -2,18 +2,18 @@
 #INCLUDE 'PROTHEUS.CH'
 
 /*/{Protheus.doc} User Function zTButton
-  Aprendendo a usar o zTButton
+  Aprendendo a usar o TButton
   @type  User Function
   @author Sidney Santos
   @since 12/11/2020
   @version 1.0
-  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew  
-  @see https://tdn.totvs.com.br/display/tec/Construtor+TButton%3ANew 
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TDialog%3ANew
+  @see https://tdn.totvs.com.br/display/tec/Construtor+TButton%3ANew
   @see https://tdn.totvs.com.br/display/tec/Activate
   /*/
 User Function zTButton()
-   
-  Local oDlgTela 
+
+  Local oDlgTela
   Local cTituloJanela := 'Utilitários do Protheus'
   Local oBtnClientes
   Local oBtnFornecedores
@@ -35,4 +35,4 @@ User Function zTButton()
 
   oDlgTela:Activate(,,,)
 
-Return 
+Return

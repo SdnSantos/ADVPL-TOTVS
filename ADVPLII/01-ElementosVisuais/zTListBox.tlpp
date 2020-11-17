@@ -1,0 +1,32 @@
+#INCLUDE 'TOTVS.CH''
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTListBox
+  TListBox
+  @type  User Function
+  @author Sidney Santos
+  @since 17/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/Construtor+TListBox%3ANew
+  /*/
+User Function zTListBox()
+
+Local oTDlgScreen
+Local oTListBox
+Local oTBtnExec
+
+Local aItems        := {'Masculino','Feminino','Outros'}
+Local nList         := 1
+
+
+  oTDlgScreen       := TDialog():New(000,000,300,300,'TListBox',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+  oTListBox         := TListBox():New(020,020,{ |u|if(Pcount()>0,nList:=u,nList)},aItems,100,050,,oTDlgScreen,,,,.T.)
+
+  oTListBox:bChange := { || MsgInfo("Mudou para o item " + aItems[nList], 'Change')}
+
+  oTBtnExec         := TButton():New(100,020,"Executar",oTDlgScreen,{||alert(aItems[nList])},040,010,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+  oTDlgScreen:Activate(,,,)
+
+Return
