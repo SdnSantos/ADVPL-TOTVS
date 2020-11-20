@@ -1,0 +1,32 @@
+#INCLUDE 'TOTVS.CH'
+#INCLUDE 'PROTHEUS.CH'
+
+/*/{Protheus.doc} User Function zTCheckBox
+  zTCheckBox
+  @type  User Function
+  @author Sidney Santos
+  @since 19/11/2020
+  @version 1.0
+  @see https://tdn.totvs.com/display/tec/Construtor+TCheckBox%3ANew
+  /*/
+User Function zTCheckBox()
+
+Local oTDlgScreen
+Local oTCheck1
+Local oTCheck2
+
+Local lCheck1
+Local lCheck2
+
+
+oTDlgScreen         := TDialog():New(000,000,300,300,'zTCheckBox',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+oTCheck1            := TCheckBox():New(20,01,'CheckBox 1',{||lCheck1},oTDlgScreen,100,210,,{ || lCheck1 := !lCheck1, IIF(lCheck1, MsgInfo("Está marcado", "Status"), MsgInfo("Está desmarcado", "Status"))},,,,,,.T.,,,)
+
+oTCheck2            := TCheckBox():New(30,01,'CheckBox 2',,oTDlgScreen,100,210,,,,,,,,.T.,,,)
+oTCheck2:bSetGet    := {||lCheck2}
+oTCheck2:bLClicked  := {|| lCheck2 := !lCheck2, IIF(lCheck2, MsgInfo("Está marcado", "Status"), MsgInfo("Está desmarcado", "Status"))}
+
+oTDlgScreen:Activate(,,,)
+
+Return
