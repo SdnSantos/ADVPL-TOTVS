@@ -1,0 +1,391 @@
+#include 'TOTVS.CH'
+#include 'PROTHEUS.CH'
+
+#Define ENTER  Chr(10) + Chr(13) // SALTO DE LINHA
+
+/*/{Protheus.doc} User Function cadprot
+(long_description)
+@type  Function
+@author Sidney Santos
+@since 27/11/2020
+@version 1.0
+/*/
+User Function cadprot()
+
+	Private oDlgTela
+	Private cTituloTela       := 'Cadastro de Protheuzeiro'
+
+	Private aFolder
+	Private oFolder
+
+  Private oSayCodigo
+  Private oGetCodigo
+  Private cGetCodigo        := Space(06)
+
+	Private oSayNome
+	Private oGetNome
+	Private cGetNome          := Space(30)
+
+	Private oSayNomeReduz
+	Private oGetNomeReduz
+	Private cGetNomeReduz     := Space(20)
+
+	Private oSayDataNasc
+	Private oGetDataNasc
+	Private dGetDataNasc      := Date()
+
+	Private oSayDDDCel
+	Private oGetDDDCel
+	Private cGetDDDCel        := Space(02)
+
+	Private oSayCel
+	Private oGetCel
+	Private cGetCel           := Space(10)
+
+	Private oGroupSexo
+
+	Private oRadioSexo
+	Private aItensSexo        := {'Masculino','Feminino'}
+	Private nRadioSexo        := 1
+
+	Private oSayCPF
+	Private oGetCPF
+	Private cGetCPF           := Space(14)
+
+	Private oSayEnd
+	Private oGetEnd
+	Private cGetEnd           := Space(30)
+
+	Private oSayBairro
+	Private oGetBairro
+	Private cGetBairro        := Space(20)
+
+	Private oSayTpImovel
+	Private aItensTpImovel    := {'Casa', 'Apartamento', 'Sobrado', 'Edícula'}
+	Private cComboTpImovel    := aItensTpImovel[1]
+	Private oComboTpImovel
+
+	Private oSayCEP
+	Private oGetCEP
+	Private cGetCEP           := Space(08)
+
+	Private oSayEstado
+	Private aItensEstado      := { 'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO' }
+	Private cComboEstado      := aItensEstado[1]
+	Private oComboEstado
+
+	Private oSayDescEstado
+	Private aItensDescEstado  := { 'Acre','Alagoas','Amapá','Amazonas','Bahia','Ceará','Distrito Federal','Espírito Santo','Goiás','Maranhão','Mato Grosso','Mato Grosso do Sul','Minas Gerais','Pará','Paraíba','Paraná','Pernambuco','Piauí','Rio de Janeiro','Rio Grande do Norte','Rio Grande do Sul','Rondonia','Roraima','Santa Catarina','São Paulo','Sergipe','Tocantins' }
+	Private oGetDescEstado
+	Private cGetDescEstado    := Space(60)
+
+	Private oSayCidade
+	Private oGetCidade
+	Private cGetCidade        := Space(30)
+
+	Private oSayEstCivil
+	Private aItensEstCivil    := {'Solteiro', 'Namorando', 'Juntado', 'Casado'}
+	Private cComboEstCivil    := aItensEstCivil[1]
+	Private oComboEstCivil
+
+	Private oGroupPet
+
+	Private oRadioPet
+	Private aItensPet         := {'Sim','Não'}
+	Private nRadioPet         := 1
+
+	Private oGroupLinguagens
+
+	Private oCheckADVPL
+	Private cCheckADVPL       := 'ADVPL'
+	Private lCheckADVPL       := .F.
+
+	Private oCheckSQL
+	Private cCheckSQL         := 'SQL'
+	Private lCheckSQL         := .F.
+
+	Private oCheckCSharp
+	Private cCheckCSharp      := 'CSharp'
+	Private lCheckCSharp      := .F.
+
+	Private oCheckPython
+	Private cCheckPython      := 'Python'
+	Private lCheckPython      := .F.
+
+	Private oBtnTodas
+	Private oBtnNenhuma
+
+	Private oSayObs
+	Private oMultiGetObs
+	Private cMultiGetObs
+
+	Private cPath := 'C:\TOTVS\12127\Protheus\protheus_data\system\'
+
+	Private oBtnIncluir
+	Private oBtnAlterar
+	Private oBtnConsultar
+	Private oBtnExcluir
+
+	Private oBmpIncluir
+	Private oBmpAlterar
+	Private oBmpConsultar
+	Private oBmpExcluir
+
+	oDlgTela  := TDialog():New(000,000,0800,1200,cTituloTela,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+// -----------------------------------------------------
+// Criacao das ABAS
+// -----------------------------------------------------
+
+	aFolder     := { 'Dados Pessoais', 'Endereço', 'Outros' }
+	oFolder     := Tfolder():New(0,0,aFolder,aFolder,oDlgTela,,,,.T.,,730,200)
+
+// -----------------------------------------------------
+// PRIMEIRA ABA
+// -----------------------------------------------------
+
+  oSayCodigo      := TSay():New(001,005,{||'Código: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,050,020)
+
+	oGetCodigo      := TGet():New(010,005,{ |u| cGetCodigo:=ProxCod() },oFolder:aDialogs[1],050,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCodigo,,,,)
+
+	oSayNome        := TSay():New(001,065,{||'Nome: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,160,020)
+
+	oGetNome        := TGet():New(010,065,{ |u| IIF(Pcount()>0,cGetNome:=u,cGetNome)},oFolder:aDialogs[1],160,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetNome,,,,)
+
+  oSayCPF       := TSay():New(001,240,{||'CPF: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,080,020)
+
+	oGetCPF       := TGet():New(010,240,{ |u| IIF(Pcount()>0,cGetCPF:=u,cGetCPF)},oFolder:aDialogs[1],080,013,"@E 999.999.999-99",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCPF,,,,)
+
+  oSayDataNasc    := TSay():New(001,330,{||'Data de Nascimento: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,100,020)
+
+	oGetDataNasc    := TGet():New(010,330,{ |u| IIF(Pcount()>0,dGetDataNasc:=u,dGetDataNasc)},oFolder:aDialogs[1],060,013,,,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,,,,,.T.)
+
+	oSayNomeReduz   := TSay():New(040,005,{||'Nome Reduzido: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,100,020)
+
+	oGetNomeReduz   := TGet():New(050,005,{ |u| IIF(Pcount()>0,cGetNomeReduz:=u,cGetNomeReduz)},oFolder:aDialogs[1],100,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetNomeReduz,,,,)
+
+	oSayDDDCel    := TSay():New(040,130,{||'DDD: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetDDDCel    := TGet():New(050,130,{ |u| IIF(Pcount()>0,cGetDDDCel:=u,cGetDDDCel)},oFolder:aDialogs[1],030,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetDDDCel,,,,)
+
+	oSayCel       := TSay():New(040,165,{||'Cel: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetCel       := TGet():New(050,165,{ |u| IIF(Pcount()>0,cGetCel:=u,cGetCel)},oFolder:aDialogs[1],060,013,"@E 99999-9999",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCel,,,,)
+
+	oGroupSexo    := TGroup():New(040,250,100,400,'Sexo',oFolder:aDialogs[1],,,.T.)
+
+	oRadioSexo    := TRadMenu():New(050,260,aItensSexo,{ |u| IIF(PCount()==0,nRadioSexo,nRadioSexo:=u)},oGroupSexo,,,,,,,,100,013,,,,.T.)
+
+// ---------------------------------------------------------------------
+// SEGUNDA ABA
+// ---------------------------------------------------------------------
+
+	oSayEnd        := TSay():New(001,005,{||'Endereço: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetEnd        := TGet():New(010,005,{ |u| IIF(Pcount()>0,cGetEnd:=u,cGetEnd)},oFolder:aDialogs[2],180,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetEnd,,,,)
+
+	oSayBairro        := TSay():New(001,200,{||'Bairro: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetBairro        := TGet():New(010,200,{ |u| IIF(Pcount()>0,cGetBairro:=u,cGetBairro)},oFolder:aDialogs[2],096,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetBairro,,,,)
+
+	oSayTpImovel      := TSay():New(001,320,{||'Tipo de Imóvel: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oComboTpImovel    := TComboBox():New(010,320,{ |u|if(PCount()>0,cComboTpImovel:=u,cComboTpImovel)},aItensTpImovel,100,020,oFolder:aDialogs[2],,,,,,.T.,,,,,,,,,'cComboTpImovel')
+
+	oSayCEP       := TSay():New(001,440,{||'CEP: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetCEP       := TGet():New(010,440,{ |u| IIF(Pcount()>0,cGetCEP:=u,cGetCEP)},oFolder:aDialogs[2],060,013,"@E 99.999-999",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCEP,,,,)
+
+	oSayEstado    := TSay():New(040,005,{||'Estado: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oComboEstado  := TComboBox():New(050,005,{ |u| IIF(PCount()>0,cComboEstado:=u,cComboEstado)},aItensEstado,050,020,oFolder:aDialogs[2],,,,,,.T.,,,,,,,,,'cComboEstado')
+
+	oSayDescEstado  := TSay():New(040,070,{||'Descrição do Estado: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetDescEstado  := TGet():New(050,070,{ || cGetDescEstado:=aItensDescEstado[oComboEstado:NAT]},oFolder:aDialogs[2],150,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetDescEstado,,,,)
+
+	oSayCidade        := TSay():New(040,240,{||'Cidade: '},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oGetCidade        := TGet():New(050,240,{ |u| IIF(Pcount()>0,cGetCidade:=u,cGetCidade)},oFolder:aDialogs[2],096,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCidade,,,,)
+
+	oGetDescEstado:CtrlRefresh()
+
+// -----------------------------------------------------------------------
+// TERCEIRA ABA
+// -----------------------------------------------------------------------
+
+	oSayEstCivil      := TSay():New(001,005,{||'Estado Civil: '},oFolder:aDialogs[3],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,020)
+
+	oComboEstCivil    := TComboBox():New(010,005,{ |u|if(PCount()>0,cComboEstCivil:=u,cComboEstCivil)},aItensEstCivil,080,020,oFolder:aDialogs[3],,,,,,.T.,,,,,,,,,'cComboEstCivil')
+
+	oGroupPet         := TGroup():New(001,100,050,180,'Possui Pet?',oFolder:aDialogs[3],,,.T.)
+
+	oRadioPet         := TRadMenu():New(015,110,aItensPet,{ |u| IIF(PCount()==0,nRadioPet,nRadioPet:=u)},oGroupPet,,,,,,,,050,013,,,,.T.)
+
+	oGroupLinguagens  := TGroup():New(001,200,080,310,'Linguagens que domina?',oFolder:aDialogs[3],,,.T.)
+
+	oCheckADVPL       := TCheckBox():New(015,210,cCheckADVPL,{ || lCheckADVPL },oGroupLinguagens,070,030,,{ || lCheckADVPL := !lCheckADVPL},,,,,,.T.,,,)
+
+	oCheckSQL         := TCheckBox():New(030,210,cCheckSQL,{ || lCheckSQL },oGroupLinguagens,070,030,,{ || lCheckSQL := !lCheckSQL},,,,,,.T.,,,)
+
+	oCheckCSharp      := TCheckBox():New(045,210,cCheckCSharp,{ || lCheckCSharp },oGroupLinguagens,070,030,,{ || lCheckCSharp := !lCheckCSharp},,,,,,.T.,,,)
+
+	oCheckPython      := TCheckBox():New(060,210,cCheckPython,{ || lCheckPython },oGroupLinguagens,070,030,,{ || lCheckPython := !lCheckPython},,,,,,.T.,,,)
+
+	oBtnTodas         := TButton():New(025,250,"Todas",oGroupLinguagens,{|| lCheckADVPL := .T., lCheckSQL := .T., lCheckCSharp := .T., lCheckPython := .T. },050,013,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oBtnNenhuma       := TButton():New(045,250,"Nenhuma",oGroupLinguagens,{|| lCheckADVPL := .F., lCheckSQL := .F., lCheckCSharp := .F., lCheckPython := .F. },050,013,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oSayObs           := TSay():New(001,330,{||'Observações: '},oFolder:aDialogs[3],,,,,,.T.,CLR_BLUE,CLR_WHITE,250,020)
+
+	oMultiGetObs      := TMultiget():New(010,330,{ |u| IIF(PCount()>0,cMultiGetObs:=u, cMultiGetObs)},oFolder:aDialogs[3],250,100,,,,,,.T.)
+
+// -----------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------
+
+	oBmpIncluir     := TBitmap():New(220,030,0140,0140, NIL,cPath + "incluirprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpIncluir:lAutoSize := .T.
+
+	oBtnIncluir     :=  TButton():New(250,020,"Incluir",oDlgTela,{ || IncluirSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oBmpAlterar     := TBitmap():New(220,090,0140,0140, NIL,cPath + "alterarprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpAlterar:lAutoSize := .T.
+
+	oBtnAlterar     := TButton():New(250,080,"Alterar",oDlgTela,{ || validarOutros() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oBmpConsultar     := TBitmap():New(220,150,0140,0140, NIL,cPath + "consultarprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpConsultar:lAutoSize := .T.
+
+	oBtnConsultar   := TButton():New(250,140,"Consultar",oDlgTela,{ || validarOutros() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oBmpExcluir     := TBitmap():New(220,210,0140,0140, NIL,cPath + "excluirprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpExcluir:lAutoSize := .T.
+
+	oBtnExcluir     := TButton():New(250,200,"Excluir",oDlgTela,{ || validarOutros() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+
+	oDlgTela:Activate(,,,.T.)
+
+Return
+
+/*/{Protheus.doc} ProxCod
+	(long_description)
+	@type  Static Function
+	@author Sidney Santos
+	@since 28/11/2020
+	@version 1.0
+	/*/
+Static Function ProxCod()
+
+	Local cAliasSelect := GetNextAlias()
+	Local nProxCod
+
+	DbSelectArea('SZ1')
+
+	BeginSql alias cAliasSelect
+
+		SELECT 
+			MAX(SZ1.Z1_COD) Z1_COD
+		FROM 
+			%table:SZ1% SZ1 
+		
+	EndSql
+
+	nProxCod := StrZero((Val(Z1_COD) + 1), 6)
+
+	DbCloseArea('SZ1')
+	
+Return nProxCod
+
+/*/{Protheus.doc} LimparCampos
+	(long_description)
+	@type  Static Function
+	@author Sidney Santos
+	@since 28/11/2020
+	@version 1.0
+	/*/
+Static Function LimparCampos()
+
+	cGetCodigo					:= ProxCod()
+	cGetNome						:= Space(30)
+	cGetNomeReduz				:= Space(20)
+	dGetDataNasc				:= Date()
+	cGetDDDCel					:= Space(02)
+	cGetCel							:= Space(10)
+	nRadioPet         	:= aItensSexo[1]
+	cGetCPF							:= Space(11)
+	cGetEnd							:= Space(30)
+	cGetBairro					:= Space(20)
+	cComboTpImovel    	:= aItensTpImovel[1]
+	cGetCEP							:= Space(08)
+	cComboEstado      	:= aItensEstado[1]	
+	cGetDescEstado			:= Space(60)
+	cGetCidade					:= Space(30)
+	cComboEstCivil   		:= aItensEstCivil[1]
+	nRadioPet         	:= 1
+	lCheckADVPL       	:= .F.
+	lCheckSQL						:= .F.
+	lCheckCSharp				:= .F.
+	lCheckPython				:= .F.
+	cMultiGetObs				:= ''
+
+	//oGetNome:CtrlRefresh()
+	//oGetNomeReduz:CtrlRefresh()
+	//oGetDDDCel:CtrlRefresh()
+	//oGetCel:CtrlRefresh()
+	//oGetCPF:CtrlRefresh()
+	//oGetEnd:CtrlRefresh()
+	//oGetBairro:CtrlRefresh()
+	//oGetCEP:CtrlRefresh()
+	//oGetDescEstado:CtrlRefresh()
+	//oGetCidade:CtrlRefresh()
+
+Return 
+
+/*/{Protheus.doc} IncluirSZ1()
+(long_description)
+@type  Static Function
+@author Sidney Santos
+@since 27/11/2020
+@version 1.0  
+/*/
+Static Function IncluirSZ1()
+
+	DbSelectArea('SZ1')
+	Reclock('SZ1', .T.)
+
+    SZ1->Z1_FILIAL         := xFilial('SZ1')
+		SZ1->Z1_COD						 := cGetCodigo
+    SZ1->Z1_NOME           := cGetNome
+    SZ1->Z1_NOMERED        := cGetNomeReduz
+    SZ1->Z1_SEXO           := cValToChar(nRadioSexo)
+    SZ1->Z1_DATNASC        := dGetDataNasc
+    SZ1->Z1_DDDCEL         := cGetDDDCel
+    SZ1->Z1_CELULAR        := StrTran(cGetCel, '-', '')
+    SZ1->Z1_CPF            := StrTran(StrTran(cGetCPF, '.', ''), '-', '')
+
+    SZ1->Z1_ENDEREC        := cGetEnd
+    SZ1->Z1_BAIRRO         := cGetBairro
+    SZ1->Z1_TIPOIMO        := cComboTpImovel
+    SZ1->Z1_CEP            := StrTran(StrTran(cGetCEP, '.', ''), '-', '')
+    SZ1->Z1_ESTADO         := cComboEstado
+    SZ1->Z1_DESCEST        := cGetDescEstado
+    SZ1->Z1_CIDADE         := cGetCidade
+
+    SZ1->Z1_ESTCIVI        := cComboEstCivil
+    SZ1->Z1_TEMPET         := cValToChar(nRadioPet)
+    SZ1->Z1_LADVPL         := IIF(lCheckADVPL,   '1', '2')
+    SZ1->Z1_LSQL           := IIF(lCheckSQL,     '1', '2')
+    SZ1->Z1_LCSHARP        := IIF(lCheckCSharp,  '1', '2')
+    SZ1->Z1_LPYTHON        := IIF(lCheckPython,  '1', '2')
+    SZ1->Z1_OBS            := cMultiGetObs
+
+	MsUnlock()
+	DbCloseArea('SZ1')
+
+	MsgInfo('Protheuzeiro incluído com sucesso!', 'Cadastro')
+
+	LimparCampos()
+
+Return

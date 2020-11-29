@@ -1,0 +1,27 @@
+#include 'Protheus.ch'
+#include 'Totvs.ch'
+#include 'Topconn.ch'
+
+/*/{Protheus.doc} User Function CriaSZ1
+  (long_description)
+  @type  Function
+  @author Sidney Santos
+  @since 26/11/2020
+  @version 1.0
+  @param param_name, param_type, param_descr
+  @return return_var, return_type, return_description
+  @example
+  (examples)
+  @see https://tdn.totvs.com/display/tec/DBSelectArea
+  @see https://tdn.totvs.com/pages/viewpage.action?pageId=23889281
+  @see https://tdn.totvs.com/display/tec/DBSetOrder
+  @see https://tdn.totvs.com/pages/viewpage.action?pageId=27675626
+  @see https://tdn.totvs.com/pages/viewpage.action?pageId=23888859
+  /*/
+User Function CriaSZ1()
+  
+  DbSelectArea('SZ1')
+  DbSetOrder(1)
+  DbCloseArea('SZ1')
+
+Return 
