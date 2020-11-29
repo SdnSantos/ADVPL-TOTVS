@@ -67,7 +67,7 @@ User Function cadprot()
 
 	Private oSayCEP
 	Private oGetCEP
-	Private cGetCEP           := Space(08)
+	Private cGetCEP           := Space(10)
 
 	Private oSayEstado
 	Private aItensEstado      := { 'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO' }
@@ -146,8 +146,10 @@ User Function cadprot()
 
   oSayCodigo      := TSay():New(001,005,{||'Código: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,050,020)
 
-	oGetCodigo      := TGet():New(010,005,{ |u| cGetCodigo:=ProxCod() },oFolder:aDialogs[1],050,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCodigo,,,,)
+	oGetCodigo      := TGet():New(010,005,{ |u| IIF(Pcount()>0,cGetCodigo:=u,cGetCodigo) },oFolder:aDialogs[1],050,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCodigo,,,,)
 
+	oGetCodigo:cF3	:= 'SZ1'	
+	
 	oSayNome        := TSay():New(001,065,{||'Nome: '},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,160,020)
 
 	oGetNome        := TGet():New(010,065,{ |u| IIF(Pcount()>0,cGetNome:=u,cGetNome)},oFolder:aDialogs[1],160,013,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetNome,,,,)
@@ -244,26 +246,27 @@ User Function cadprot()
 //
 // -----------------------------------------------------------------------
 
-	oBmpIncluir     := TBitmap():New(220,030,0140,0140, NIL,cPath + "incluirprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpIncluir     := TBitmap():New(220,030,0140,0140, NIL,cPath + "incluirprotheuzeiro.bmp",.T.,oDlgTela,{|| IncluirSZ1()},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpIncluir:lAutoSize := .T.
 
 	oBtnIncluir     :=  TButton():New(250,020,"Incluir",oDlgTela,{ || IncluirSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
-	oBmpAlterar     := TBitmap():New(220,090,0140,0140, NIL,cPath + "alterarprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpAlterar     := TBitmap():New(220,090,0140,0140, NIL,cPath + "alterarprotheuzeiro.bmp",.T.,oDlgTela,{||AlterarSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpAlterar:lAutoSize := .T.
 
-	oBtnAlterar     := TButton():New(250,080,"Alterar",oDlgTela,{ || validarOutros() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+	oBtnAlterar     := TButton():New(250,080,"Alterar",oDlgTela,{||AlterarSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
-	oBmpConsultar     := TBitmap():New(220,150,0140,0140, NIL,cPath + "consultarprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpConsultar     := TBitmap():New(220,150,0140,0140, NIL,cPath + "consultarprotheuzeiro.bmp",.T.,oDlgTela,{|| ConsultarSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpConsultar:lAutoSize := .T.
 
-	oBtnConsultar   := TButton():New(250,140,"Consultar",oDlgTela,{ || validarOutros() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+	oBtnConsultar   := TButton():New(250,140,"Consultar",oDlgTela,{ || ConsultarSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
-	oBmpExcluir     := TBitmap():New(220,210,0140,0140, NIL,cPath + "excluirprotheuzeiro.bmp",.T.,oDlgTela,{||Alert("Clique em TBitmap")},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpExcluir     := TBitmap():New(220,210,0140,0140, NIL,cPath + "excluirprotheuzeiro.bmp",.T.,oDlgTela,{||ExcluirSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpExcluir:lAutoSize := .T.
 
-	oBtnExcluir     := TButton():New(250,200,"Excluir",oDlgTela,{ || validarOutros() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+	oBtnExcluir     := TButton():New(250,200,"Excluir",oDlgTela,{||ExcluirSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
+	cGetCodigo 			:= ProxCod()
 
 	oDlgTela:Activate(,,,.T.)
 
@@ -330,17 +333,6 @@ Static Function LimparCampos()
 	lCheckPython				:= .F.
 	cMultiGetObs				:= ''
 
-	//oGetNome:CtrlRefresh()
-	//oGetNomeReduz:CtrlRefresh()
-	//oGetDDDCel:CtrlRefresh()
-	//oGetCel:CtrlRefresh()
-	//oGetCPF:CtrlRefresh()
-	//oGetEnd:CtrlRefresh()
-	//oGetBairro:CtrlRefresh()
-	//oGetCEP:CtrlRefresh()
-	//oGetDescEstado:CtrlRefresh()
-	//oGetCidade:CtrlRefresh()
-
 Return 
 
 /*/{Protheus.doc} IncluirSZ1()
@@ -387,5 +379,50 @@ Static Function IncluirSZ1()
 	MsgInfo('Protheuzeiro incluído com sucesso!', 'Cadastro')
 
 	LimparCampos()
+
+Return
+
+/*/{Protheus.doc} IncluirSZ1()
+(long_description)
+@type  Static Function
+@author Sidney Santos
+@since 27/11/2020
+@version 1.0  
+/*/
+Static Function ConsultarSZ1()
+
+	DbSelectArea('SZ1')
+	DbSetOrder(1)
+	IF (DbSeek(xFilial('SZ1') + Alltrim(cGetCodigo)))
+   
+    cGetNome 							:= SZ1->Z1_NOME           
+    cGetNomeReduz 				:= SZ1->Z1_NOMERED        
+    nRadioSexo 						:= Val(SZ1->Z1_SEXO)           
+    dGetDataNasc					:= SZ1->Z1_DATNASC        
+    cGetDDDCel						:= SZ1->Z1_DDDCEL         
+    cGetCel								:= SZ1->Z1_CELULAR        
+    cGetCPF								:= SubStr(SZ1->Z1_CPF, 1, 3) + '.' + SubStr(SZ1->Z1_CPF, 4, 3) + '.' + SubStr(SZ1->Z1_CPF, 7, 3) + '-' + SubStr(SZ1->Z1_CPF, 10, 2)           
+
+    cGetEnd								:= SZ1->Z1_ENDEREC         
+    cGetBairro						:= SZ1->Z1_BAIRRO          
+    cComboTpImovel				:= SZ1->Z1_TIPOIMO         
+    cGetCEP								:= SubStr(SZ1->Z1_CEP, 1, 2) + '.' + SubStr(SZ1->Z1_CEP, 3, 3) + '-' + SubStr(SZ1->Z1_CEP, 6, 3)          
+    cComboEstado					:= SZ1->Z1_ESTADO          
+    cGetDescEstado				:= SZ1->Z1_DESCEST         
+    cGetCidade						:= SZ1->Z1_CIDADE          
+
+    cComboEstCivil				:= SZ1->Z1_ESTCIVI        
+    nRadioPet							:= Val(SZ1->Z1_TEMPET)        
+    lCheckADVPL						:= IIF(SZ1->Z1_LADVPL == '1', .T., .F.) 
+    lCheckSQL							:= IIF(SZ1->Z1_LSQL == '1', .T., .F.)            
+    lCheckCSharp					:= IIF(SZ1->Z1_LCSHARP == '1', .T., .F.)       
+    lCheckPython					:= IIF(SZ1->Z1_LPYTHON == '1', .T., .F.)       
+    cMultiGetObs					:= SZ1->Z1_OBS            
+
+	DbCloseArea('SZ1')
+
+	MsgInfo('Protheuzeiro localizado com sucesso!', 'Consultar')
+
+	ENDIF
 
 Return
