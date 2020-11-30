@@ -125,20 +125,24 @@ User Function cadprot()
 	Private oBtnAlterar
 	Private oBtnConsultar
 	Private oBtnExcluir
+	Private oBtnLimpar
+	Private oBtnFechar
 
 	Private oBmpIncluir
 	Private oBmpAlterar
 	Private oBmpConsultar
 	Private oBmpExcluir
+	Private oBmpLimpar
+	Private oBmpFechar
 
-	oDlgTela  := TDialog():New(000,000,0800,1200,cTituloTela,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+	oDlgTela  := TDialog():New(000,000,1200,1200,cTituloTela,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
 
 // -----------------------------------------------------
 // Criacao das ABAS
 // -----------------------------------------------------
 
 	aFolder     := { 'Dados Pessoais', 'Endereço', 'Outros' }
-	oFolder     := Tfolder():New(0,0,aFolder,aFolder,oDlgTela,,,,.T.,,730,200)
+	oFolder     := Tfolder():New(0,0,aFolder,aFolder,oDlgTela,,,,.T.,,850,200)
 
 // -----------------------------------------------------
 // PRIMEIRA ABA
@@ -246,25 +250,35 @@ User Function cadprot()
 //
 // -----------------------------------------------------------------------
 
-	oBmpIncluir     := TBitmap():New(220,030,0140,0140, NIL,cPath + "incluirprotheuzeiro.bmp",.T.,oDlgTela,{|| IncluirSZ1()},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpIncluir     := TBitmap():New(220,055,0140,0140, NIL,cPath + "incluirprotheuzeiro.bmp",.T.,oDlgTela,{|| IncluirSZ1()},NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpIncluir:lAutoSize := .T.
 
-	oBtnIncluir     :=  TButton():New(250,020,"Incluir",oDlgTela,{ || IncluirSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+	oBtnIncluir     :=  TButton():New(250,050,"Incluir",oDlgTela,{ || IncluirSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
-	oBmpAlterar     := TBitmap():New(220,090,0140,0140, NIL,cPath + "alterarprotheuzeiro.bmp",.T.,oDlgTela,{||AlterarSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpAlterar     := TBitmap():New(220,105,0140,0140, NIL,cPath + "alterarprotheuzeiro.bmp",.T.,oDlgTela,{||AlterarSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpAlterar:lAutoSize := .T.
 
-	oBtnAlterar     := TButton():New(250,080,"Alterar",oDlgTela,{||AlterarSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+	oBtnAlterar     := TButton():New(250,100,"Alterar",oDlgTela,{||AlterarSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
-	oBmpConsultar     := TBitmap():New(220,150,0140,0140, NIL,cPath + "consultarprotheuzeiro.bmp",.T.,oDlgTela,{|| ConsultarSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpConsultar     := TBitmap():New(220,155,0140,0140, NIL,cPath + "consultarprotheuzeiro.bmp",.T.,oDlgTela,{|| ConsultarSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpConsultar:lAutoSize := .T.
 
-	oBtnConsultar   := TButton():New(250,140,"Consultar",oDlgTela,{ || ConsultarSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+	oBtnConsultar   := TButton():New(250,150,"Consultar",oDlgTela,{ || ConsultarSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
-	oBmpExcluir     := TBitmap():New(220,210,0140,0140, NIL,cPath + "excluirprotheuzeiro.bmp",.T.,oDlgTela,{||ExcluirSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpExcluir     := TBitmap():New(220,205,0140,0140, NIL,cPath + "excluirprotheuzeiro.bmp",.T.,oDlgTela,{||ExcluirSZ1() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
 	oBmpExcluir:lAutoSize := .T.
 
 	oBtnExcluir     := TButton():New(250,200,"Excluir",oDlgTela,{||ExcluirSZ1() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oBmpLimpar      := TBitmap():New(220,455,0140,0140, NIL,cPath + "limpartela.bmp",.T.,oDlgTela,{|| LimparCampos() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpLimpar:lAutoSize := .T.
+
+	oBtnLimpar			:= TButton():New(250,450,"Limpar",oDlgTela,{||LimparCampos() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+	oBmpFechar      := TBitmap():New(220,505,0140,0140, NIL,cPath + "sair.bmp",.T.,oDlgTela,{|| MsgInfo('Obrigado por usar nosso sistema!'), oDlgTela:End() },NIL,.F.,.F.,NIL,NIL,.F.,NIL,.T.,NIL,.F.)
+	oBmpFechar:lAutoSize := .T.	
+
+	oBtnFechar      := TButton():New(250,500,"Fechar",oDlgTela,{||MsgInfo('Obrigado por usar nosso sistema!'), oDlgTela:End() },040,015,,,.F.,.T.,.F.,,.F.,,,.F.)
 
 	cGetCodigo 			:= ProxCod()
 
@@ -345,40 +359,56 @@ Return
 Static Function IncluirSZ1()
 
 	DbSelectArea('SZ1')
-	Reclock('SZ1', .T.)
+	DbSetOrder(1)
 
-    SZ1->Z1_FILIAL         := xFilial('SZ1')
-		SZ1->Z1_COD						 := cGetCodigo
-    SZ1->Z1_NOME           := cGetNome
-    SZ1->Z1_NOMERED        := cGetNomeReduz
-    SZ1->Z1_SEXO           := cValToChar(nRadioSexo)
-    SZ1->Z1_DATNASC        := dGetDataNasc
-    SZ1->Z1_DDDCEL         := cGetDDDCel
-    SZ1->Z1_CELULAR        := StrTran(cGetCel, '-', '')
-    SZ1->Z1_CPF            := StrTran(StrTran(cGetCPF, '.', ''), '-', '')
+	IF (DbSeek(xFilial('SZ1') + Alltrim(cGetCodigo)))
+		Alert('O Código ' + Alltrim(cGetCodigo) + ' já existe cadastrado!','FALHA')
+	ELSE
 
-    SZ1->Z1_ENDEREC        := cGetEnd
-    SZ1->Z1_BAIRRO         := cGetBairro
-    SZ1->Z1_TIPOIMO        := cComboTpImovel
-    SZ1->Z1_CEP            := StrTran(StrTran(cGetCEP, '.', ''), '-', '')
-    SZ1->Z1_ESTADO         := cComboEstado
-    SZ1->Z1_DESCEST        := cGetDescEstado
-    SZ1->Z1_CIDADE         := cGetCidade
+		IF (Empty(cGetNome) .OR. Empty(cGetNomeReduz) .OR. Empty(dGetDataNasc) .OR. Empty(cGetDDDCel) .OR. Empty(StrTran(cGetCel, '-', '')) .OR. Empty(StrTran(StrTran(cGetCPF, '.', ''), '-', '')))
+			MsgAlert('Há campos obrigatórios sem preencher.' + ENTER + 'Por Favor verifique!', 'FALHA')
+		ELSE
+			Reclock('SZ1', .T.)
 
-    SZ1->Z1_ESTCIVI        := cComboEstCivil
-    SZ1->Z1_TEMPET         := cValToChar(nRadioPet)
-    SZ1->Z1_LADVPL         := IIF(lCheckADVPL,   '1', '2')
-    SZ1->Z1_LSQL           := IIF(lCheckSQL,     '1', '2')
-    SZ1->Z1_LCSHARP        := IIF(lCheckCSharp,  '1', '2')
-    SZ1->Z1_LPYTHON        := IIF(lCheckPython,  '1', '2')
-    SZ1->Z1_OBS            := cMultiGetObs
+				SZ1->Z1_FILIAL         := xFilial('SZ1')
+				SZ1->Z1_COD						 := cGetCodigo
+				SZ1->Z1_NOME           := cGetNome
+				SZ1->Z1_NOMERED        := cGetNomeReduz
+				SZ1->Z1_SEXO           := cValToChar(nRadioSexo)
+				SZ1->Z1_DATNASC        := dGetDataNasc
+				SZ1->Z1_DDDCEL         := cGetDDDCel
+				SZ1->Z1_CELULAR        := StrTran(cGetCel, '-', '')
+				SZ1->Z1_CPF            := StrTran(StrTran(cGetCPF, '.', ''), '-', '')
 
-	MsUnlock()
+				SZ1->Z1_ENDEREC        := cGetEnd
+				SZ1->Z1_BAIRRO         := cGetBairro
+				SZ1->Z1_TIPOIMO        := cComboTpImovel
+				SZ1->Z1_CEP            := StrTran(StrTran(cGetCEP, '.', ''), '-', '')
+				SZ1->Z1_ESTADO         := cComboEstado
+				SZ1->Z1_DESCEST        := cGetDescEstado
+				SZ1->Z1_CIDADE         := cGetCidade
+
+				SZ1->Z1_ESTCIVI        := cComboEstCivil
+				SZ1->Z1_TEMPET         := cValToChar(nRadioPet)
+				SZ1->Z1_LADVPL         := IIF(lCheckADVPL,   '1', '2')
+				SZ1->Z1_LSQL           := IIF(lCheckSQL,     '1', '2')
+				SZ1->Z1_LCSHARP        := IIF(lCheckCSharp,  '1', '2')
+				SZ1->Z1_LPYTHON        := IIF(lCheckPython,  '1', '2')
+				SZ1->Z1_OBS            := cMultiGetObs
+
+			MsUnlock()
+			
+			IF nRadioSexo = 1
+				MsgInfo('PROTHEUZEIRO incluído com sucesso!', 'SUCESSO')
+			ELSE
+				MsgInfo('PROTHEUZEIRA incluído com sucesso!', 'SUCESSO')
+			ENDIF
+
+			LimparCampos()
+		ENDIF
+	ENDIF
+
 	DbCloseArea('SZ1')
-
-	MsgInfo('Protheuzeiro incluído com sucesso!', 'Cadastro')
-
-	LimparCampos()
 
 Return
 
@@ -421,8 +451,106 @@ Static Function ConsultarSZ1()
 
 	DbCloseArea('SZ1')
 
-	MsgInfo('Protheuzeiro localizado com sucesso!', 'Consultar')
-
+		IF nRadioSexo = 1
+			MsgInfo('PROTHEUZEIRO localizado com sucesso!', 'SUCESSO')
+		ELSE
+			MsgInfo('PROTHEUZEIRA localizado com sucesso!', 'SUCESSO')
+		ENDIF
+	ELSE
+		MsgInfo('PROTHEUZEIRO(A) não localizado!', 'FALHA')
 	ENDIF
 
 Return
+
+/*/{Protheus.doc} AlterarSZ1
+	(long_description)
+	@type  Static Function
+	@author Sidney Santos
+	@since 30/11/2020
+	@version 1.0
+	/*/
+Static Function AlterarSZ1()
+	
+	DbSelectArea('SZ1')
+	DbSetOrder(1)
+	IF (DbSeek(xFilial('SZ1') + Alltrim(cGetCodigo)))
+   
+	 	IF (Empty(cGetNome) .OR. Empty(cGetNomeReduz) .OR. Empty(dGetDataNasc) .OR. Empty(cGetDDDCel) .OR. Empty(StrTran(cGetCel, '-', '')) .OR. Empty(StrTran(StrTran(cGetCPF, '.', ''), '-', '')))
+			MsgAlert('Há campos obrigatórios sem preencher.' + ENTER + 'Por Favor verifique!', 'FALHA')
+		ELSE
+			Reclock('SZ1', .F.)
+
+				SZ1->Z1_NOME           := cGetNome
+				SZ1->Z1_NOMERED        := cGetNomeReduz
+				SZ1->Z1_SEXO           := cValToChar(nRadioSexo)
+				SZ1->Z1_DATNASC        := dGetDataNasc
+				SZ1->Z1_DDDCEL         := cGetDDDCel
+				SZ1->Z1_CELULAR        := StrTran(cGetCel, '-', '')
+				SZ1->Z1_CPF            := StrTran(StrTran(cGetCPF, '.', ''), '-', '')
+
+				SZ1->Z1_ENDEREC        := cGetEnd
+				SZ1->Z1_BAIRRO         := cGetBairro
+				SZ1->Z1_TIPOIMO        := cComboTpImovel
+				SZ1->Z1_CEP            := StrTran(StrTran(cGetCEP, '.', ''), '-', '')
+				SZ1->Z1_ESTADO         := cComboEstado
+				SZ1->Z1_DESCEST        := cGetDescEstado
+				SZ1->Z1_CIDADE         := cGetCidade
+
+				SZ1->Z1_ESTCIVI        := cComboEstCivil
+				SZ1->Z1_TEMPET         := cValToChar(nRadioPet)
+				SZ1->Z1_LADVPL         := IIF(lCheckADVPL,   '1', '2')
+				SZ1->Z1_LSQL           := IIF(lCheckSQL,     '1', '2')
+				SZ1->Z1_LCSHARP        := IIF(lCheckCSharp,  '1', '2')
+				SZ1->Z1_LPYTHON        := IIF(lCheckPython,  '1', '2')
+				SZ1->Z1_OBS            := cMultiGetObs
+
+			MsUnlock() 
+
+			IF nRadioSexo = 1
+				MsgInfo('PROTHEUZEIRO alterado com sucesso!', 'SUCESSO')
+			ELSE
+				MsgInfo('PROTHEUZEIRA alterado com sucesso!', 'SUCESSO')
+			ENDIF
+
+		ENDIF
+
+	ENDIF
+
+	DbCloseArea('SZ1')
+
+Return 
+
+/*/{Protheus.doc} ExcluirSZ1
+	(long_description)
+	@type  Static Function
+	@author Sidney Santos
+	@since 30/11/2020
+	@version 1.0
+	/*/
+Static Function ExcluirSZ1()
+
+	IF MSGYESNO('Deseja excluir o usuário: ' + Alltrim(cGetNome) + '?', 'ATENÇÃO')
+
+		DbSelectArea('SZ1')
+		DbSetOrder(1)
+		IF (DbSeek(xFilial('SZ1') + Alltrim(cGetCodigo)))
+		
+			Reclock('SZ1', .F.)
+			DbDelete()
+			MsUnlock()
+
+			IF nRadioSexo = 1
+				MsgInfo('PROTHEUZEIRO excluído com sucesso!', 'SUCESSO')
+			ELSE
+				MsgInfo('PROTHEUZEIRA excluído com sucesso!', 'SUCESSO')
+			ENDIF
+
+			LimparCampos()
+	
+		ENDIF
+
+	ELSE
+		Alert('Exclusão abrotada pelo usuário', 'FALHA')
+	ENDIF
+
+Return 
