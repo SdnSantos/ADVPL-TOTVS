@@ -4,19 +4,41 @@
 		{
 			"type": "totvs_language_debug",
 			"request": "launch",
-			"name": "TOTVS Language Debug",
+			"cwb": "${workspaceRoot}",
+			"name": "Home",
+			"smartclientBin": "/Users/sidneysantos/TOTVS/Home/smartclient/smartclient.app/Contents/MacOS/smartclient",
 			"program": "${command:AskForProgramName}",
-			"cwb": "${workspaceFolder}",
-			"smartclientBin": "/Users/sidneysantos/TOTVS/SmartClient/smartclient.app/Contents/MacOS/smartclient",
+			"enableMultiThread": false,
+			"enableProfile": false,
 			"isMultiSession": true,
+			"isAccessibilityMode": false,
+			"doNotShowSplash": false,
+			"language": "",
+			"ignoreFiles": true,
 			"enableTableSync": true
 		},
 		{
 			"type": "totvs_language_debug",
 			"request": "launch",
 			"cwb": "${workspaceRoot}",
-			"name": "P12127",
-			"smartclientBin": "/Users/sidneysantos/TOTVS/smartclient/smartclient.exe",
+			"name": "Intercarta-P12127",
+			"smartclientBin": "/Users/sidneysantos/TOTVS/Intercarta/2-Smartclient/Smartclient-P12127.app/Contents/MacOS/smartclient",
+			"program": "${command:AskForProgramName}",
+			"enableMultiThread": false,
+			"enableProfile": false,
+			"isMultiSession": true,
+			"isAccessibilityMode": false,
+			"doNotShowSplash": false,
+			"language": "",
+			"ignoreFiles": true,
+			"enableTableSync": true
+		},
+		{
+			"type": "totvs_language_debug",
+			"request": "launch",
+			"cwb": "${workspaceRoot}",
+			"name": "Intercarta-P12125",
+			"smartclientBin": "/Users/sidneysantos/TOTVS/Intercarta/2-Smartclient/Smartclient-P12125.app/Contents/MacOS/smartclient",
 			"program": "${command:AskForProgramName}",
 			"enableMultiThread": false,
 			"enableProfile": false,
@@ -150,5 +172,5 @@
 			"description": " ()"
 		}
 	],
-	"lastProgramExecuted": "SIGAESP"
+	"lastProgramExecuted": "sigamdi"
 }

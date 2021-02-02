@@ -36,7 +36,7 @@ Local oTBtnExec := Nil
 Local oTBtnExit := Nil
 
 Local oTFont		:= TFont():New('Comic Sans MS',,20,,.F.,,,,,.F.,.F.)
-Local oTFontN		:= TFont():New('Comic Sans MS',,20,,.T.,,,,,.F.,.T.)
+//Local oTFontN		:= TFont():New('Comic Sans MS',,20,,.T.,,,,,.F.,.T.)
 	
 	//-> Recupera e/ou define um bloco de código para ser avaliado quando ocorrer um erro em tempo de execução.
 	
