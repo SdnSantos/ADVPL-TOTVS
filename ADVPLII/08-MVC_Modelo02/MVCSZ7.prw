@@ -424,30 +424,37 @@ User Function GrvSZ7()
   Local nPosTotal   := aScan(aHeaderAux, { |x| Alltrim(Upper(x[2])) == 'Z7_TOTAL'   })
 
   // Pegando a linha posicionada
-  Local nLinAtu     := 1
+  Local nLinAtu 
 
   // Tipo de operação do momento (Inclusão / Alteração / Exclusão)
   Local cOption     := oModelCabec:GetOperation()
 
+  DbSelectArea('SZ7')
+  SZ7->(DbSetOrder(1))
+
   IF cOption == MODEL_OPERATION_INSERT
 
-    For nLinAtu to Len(aColsAux)
+    For nLinAtu := 1 to Len(aColsAux)
       // Verifição se a linha não está deletada para salvar
       If !aColsAux[nLinAtu][Len(aHeaderAux)+1]
 
         Reclock('SZ7', .T.)
+
+          // DADOS DO CABEÇALHO
           Z7_FILIAL   := cFillSZ7
           Z7_NUM      := cNum
           Z7_EMISSAO  := dEmissao
           Z7_FORNECE  := cFornece
           Z7_LOJA     := cLoja
           Z7_USER     := cUser
+
+          // DADOS DA GRID
           Z7_ITEM     := aColsAux[nLinAtu, nPosItem]
           Z7_PRODUTO  := aColsAux[nLinAtu, nPosProd]
           Z7_QUANT    := aColsAux[nLinAtu, nPosQtd]
           Z7_PRECO    := aColsAux[nLinAtu, nPosPrc]
           Z7_TOTAL    := aColsAux[nLinAtu, nPosTotal]
-        SZ7->MsUnlock()
+        SZ7->(MsUnlock())
 
       Endif
     Next n
