@@ -82,11 +82,14 @@ Static Function ModelDef()
   // Objeto responsavel pela estrutura dos itens
   Local oStItens  := FWFormStruct(1, 'SZ7')
 
+  // Chamada da função que validará o Cabeçalho (Master)
+  Local bVldPos   := {|| U_VldSZ7()}
+
   // Chamada da função que validará a INCLUSÃO, ALTERAÇÃO e EXCLUSÃO dos itens
   Local bVldCom   := {|| U_GrvSZ7()}
 
   //                                              /*bPre*/, /*bPos*/, /*bCommit*/, /*bCancel*/
-  Local oModel    := MPFormModel():New('MVCSZ7M', /*bPre*/, /*bPos*/, bVldCom, /*bCancel*/)
+  Local oModel    := MPFormModel():New('MVCSZ7M', /*bPre*/, bVldPos, bVldCom, /*bCancel*/)
 
   // Criacao da tabela temporaria que sera utilizada no cabecalho
   oStCabec:AddTable('SZ7', {'Z7_FILIAL', 'Z7_NUM', 'Z7_ITEM'}, 'Cabeçalho SZ7')
@@ -382,6 +385,19 @@ Static Function ViewDef()
 
 Return oView
 
+/*/{Protheus.doc} User Function VldSZ7
+  @type  Function
+  @author Sistematizei
+  @since 03/02/2021
+  @version 1.0
+  @return lRet, lógico, retorno da validação de inclusão do cabeçalho
+  /*/
+User Function VldSZ7()
+  Local lRet    := .T.
+  Local aArea   := GetArea()
+  
+Return lRet
+
 /*/{Protheus.doc} User Function GrvSZ7
   (long_description)
   @type  Function
@@ -432,13 +448,13 @@ User Function GrvSZ7()
   DbSelectArea('SZ7')
   SZ7->(DbSetOrder(1))
 
-  IF cOption == MODEL_OPERATION_INSERT
+  If cOption == MODEL_OPERATION_INSERT
 
     For nLinAtu := 1 to Len(aColsAux)
       // Verifição se a linha não está deletada para salvar
       If !aColsAux[nLinAtu][Len(aHeaderAux)+1]
 
-        Reclock('SZ7', .T.)
+        Reclock('SZ7', .T.) // .T. = INCLUSÃO
 
           // DADOS DO CABEÇALHO
           Z7_FILIAL   := cFillSZ7
@@ -459,7 +475,93 @@ User Function GrvSZ7()
       Endif
     Next n
 
-  ENDIF
+  Elseif cOption == MODEL_OPERATION_UPDATE
+
+    For nLinAtu := 1 to Len(aColsAux)
+      // Verifição se a linha está deletada para salvar
+      If aColsAux[nLinAtu][Len(aHeaderAux)+1]
+
+        // Se a linha estiver deletada, eu ainda preciso verificar se a linha deletada está inclusa ou não no sistema/banco
+        SZ7->(DbSetOrder(2)) // Filial + Numero Pedido + Item
+        If SZ7->(DbSeek(cFillSZ7 + cNum + aColsAux[nLinAtu, nPosItem]))
+          Reclock('SZ7', .F.)
+            DbDelete()
+          SZ7->(MsUnlock())
+        Endif
+
+      // Caso a linha não esteja excluída, apenas faz as alterações
+      Else
+
+        SZ7->(DbSetOrder(2)) // Filial + Numero Pedido + Item
+        // Se encontrar alterará 
+        If SZ7->(DbSeek(cFillSZ7 + cNum + aColsAux[nLinAtu, nPosItem]))
+          Reclock('SZ7', .F.)
+            // DADOS DO CABEÇALHO
+            Z7_FILIAL   := cFillSZ7
+            Z7_NUM      := cNum
+            Z7_EMISSAO  := dEmissao
+            Z7_FORNECE  := cFornece
+            Z7_LOJA     := cLoja
+            Z7_USER     := cUser
+
+            // DADOS DA GRID
+            Z7_ITEM     := aColsAux[nLinAtu, nPosItem]
+            Z7_PRODUTO  := aColsAux[nLinAtu, nPosProd]
+            Z7_QUANT    := aColsAux[nLinAtu, nPosQtd]
+            Z7_PRECO    := aColsAux[nLinAtu, nPosPrc]
+            Z7_TOTAL    := aColsAux[nLinAtu, nPosTotal]
+          SZ7->(MsUnlock())     
+
+        // Não conseguindo encontrar cai no else e inseri     
+        Else
+          Reclock('SZ7', .T.)
+            // DADOS DO CABEÇALHO
+            Z7_FILIAL   := cFillSZ7
+            Z7_NUM      := cNum
+            Z7_EMISSAO  := dEmissao
+            Z7_FORNECE  := cFornece
+            Z7_LOJA     := cLoja
+            Z7_USER     := cUser
+
+            // DADOS DA GRID
+            Z7_ITEM     := aColsAux[nLinAtu, nPosItem]
+            Z7_PRODUTO  := aColsAux[nLinAtu, nPosProd]
+            Z7_QUANT    := aColsAux[nLinAtu, nPosQtd]
+            Z7_PRECO    := aColsAux[nLinAtu, nPosPrc]
+            Z7_TOTAL    := aColsAux[nLinAtu, nPosTotal]
+          SZ7->(MsUnlock())
+
+        Endif
+      Endif
+    Next n
+  Elseif cOption == MODEL_OPERATION_DELETE
+    
+    SZ7->(DbSetOrder(1)) // Filial + Numero Pedido
+
+    While !SZ7->(EOF()) .And. SZ7->Z7_FILIAL == cFillSZ7 .And. SZ7->Z7_NUM == cNum  
+      Reclock('SZ7', .F.)
+        DbDelete()
+      SZ7->(MsUnlock())
+
+      SZ7->(DbSkip())
+    Enddo
+
+  /*
+
+  // SEGUNDA FORMA DE EXCLUIR COM BASE NO QUE ESTÁ NO GRID
+
+    SZ7->(DbSetOrder(2))
+    For nLinAtu := 1 to Len(aColsAux)
+      If SZ7->(DbSeek(cFillSZ7+cNum+aColsAux[nLinAtu][nPosItem]))
+        Reclock('SZ7', .F.)
+          DbDelete()
+        SZ7->(MsUnlock())
+      Endif
+    Next nLinAtu
+
+  */
+
+  Endif
 
   RestArea(aArea)
 
