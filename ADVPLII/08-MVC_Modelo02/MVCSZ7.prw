@@ -122,8 +122,8 @@ Static Function ModelDef()
     Nil,;                    // [07]  B   Code-block de validação do campo
     Nil,;                    // [08]  B   Code-block de valida??o When do campo
     {},;                     // [09]  A   Lista de valores permitido do campo
-    .F.,;                    // [10]  L   Indica se o campo tem preenchimento obrigat?rio
-    FwBuildFeature( STRUCT_FEATURE_INIPAD, "Iif(!INCLUI,SZ7->Z7_NUM,'')" ),;        // [11]  B  Code-block de inicializacao do campo
+    .F.,;                    // [10]  L   Indica se o campo tem preenchimento obrigatório
+    FwBuildFeature( STRUCT_FEATURE_INIPAD, "Iif(!INCLUI, SZ7->Z7_NUM, GetSXENum('SZ7','Z7_NUM'))" ),;        // [11]  B  Code-block de inicializacao do campo
     .T.,;                    // [12]  L   Indica se trata-se de um campo chave
     .F.,;                    // [13]  L   Indica se o campo pode receber valor em uma opera??o de update.
     .F.)                     // [14]  L   Indica se o campo virtual
@@ -138,9 +138,9 @@ Static Function ModelDef()
     Nil,;                     // [07] B Bloco de código de validação do campo
     Nil,;                     // [08] B Bloco de código de validação when do campo
     {},;                      // [09] A Lista de valores permitidos
-    .F.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
-    FwBuildFeature( STRUCT_FEATURE_INIPAD, 'IIF(!INCLUI, SZ7->Z7_EMISSAO, dDataBase)'),;     // [11] B Bloco de código de inicialização do campo
-    .T.,;                     // [12] L Indica se trata-se de um campo chave
+    .T.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
+    FwBuildFeature( STRUCT_FEATURE_INIPAD, 'Iif(!INCLUI, SZ7->Z7_EMISSAO, dDataBase)'),;     // [11] B Bloco de código de inicialização do campo
+    .F.,;                     // [12] L Indica se trata-se de um campo chave
     .F.,;                     // [13] L Indica se o campo não pode receber valor em uma operação de update
     .F.,;                     // [14] L Indica se o campo é virtual
   )
@@ -155,9 +155,9 @@ Static Function ModelDef()
     Nil,;                     // [07] B Bloco de código de validação do campo
     Nil,;                     // [08] B Bloco de código de validação when do campo
     {},;                      // [09] A Lista de valores permitidos
-    .F.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
+    .T.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
     FwBuildFeature( STRUCT_FEATURE_INIPAD, 'IIF(!INCLUI, SZ7->Z7_FORNECE, "")'),;     // [11] B Bloco de código de inicialização do campo
-    .T.,;                     // [12] L Indica se trata-se de um campo chave
+    .F.,;                     // [12] L Indica se trata-se de um campo chave
     .F.,;                     // [13] L Indica se o campo não pode receber valor em uma operação de update
     .F.,;                     // [14] L Indica se o campo é virtual
   )
@@ -172,9 +172,9 @@ Static Function ModelDef()
     Nil,;                     // [07] B Bloco de código de validação do campo
     Nil,;                     // [08] B Bloco de código de validação when do campo
     {},;                      // [09] A Lista de valores permitidos
-    .F.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
+    .T.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
     FwBuildFeature( STRUCT_FEATURE_INIPAD, 'IIF(!INCLUI, SZ7->Z7_LOJA, "")'),;     // [11] B Bloco de código de inicialização do campo
-    .T.,;                     // [12] L Indica se trata-se de um campo chave
+    .F.,;                     // [12] L Indica se trata-se de um campo chave
     .F.,;                     // [13] L Indica se o campo não pode receber valor em uma operação de update
     .F.,;                     // [14] L Indica se o campo é virtual
   )
@@ -207,7 +207,7 @@ Static Function ModelDef()
   oModel:AddGrid('SZ7DETAIL','SZ7MASTER',oStItens)
 
   // Relacionamento do cabecalho com os itens, qual ou quais campos o grid esta vinculado com o cabecalho
-  oModel:SetRelation('SZ7DETAIL', {{'Z7_FILIAL', 'IIF(!INCLUI, SZ7->Z7_FILIAL, FWxFilial("SZ7"))'}, {'Z7_NUM', 'SZ7->Z7_NUM'}}, SZ7->(IndexKey(1)) )
+  oModel:SetRelation('SZ7DETAIL', {{'Z7_FILIAL', 'Iif(!INCLUI, SZ7->Z7_FILIAL, FWxFilial("SZ7"))'}, {'Z7_NUM', 'SZ7->Z7_NUM'}}, SZ7->(IndexKey(1)) )
 
   // Setar a chave primaria, é obrigatório caso o X2_UNICO esteja vazio
   oModel:SetPrimaryKey({})
@@ -256,7 +256,7 @@ Static Function ViewDef()
     X3Picture('Z7_NUM'),;       // [07] C Picture
     Nil,;                       // [08] B Bloco de Picture Var
     Nil,;                       // [09] C Consulta F3
-    IIF(INCLUI, .T., .F.),;     // [10] L Indica se o campo é alterável
+    .F.,;                       // [10] L Indica se o campo é alterável
     Nil,;                       // [11] C Pasta de campo
     Nil,;                       // [12] C Agrupamento do campo
     Nil,;                       // [13] A Lista de valores permitidos do campo (combo)
@@ -395,6 +395,31 @@ Return oView
 User Function VldSZ7()
   Local lRet    := .T.
   Local aArea   := GetArea()
+
+   // FWModelActive retorna a referência do último modelo utilizado
+  Local oModel      := FWModelActive()
+
+  // Carregando o modelo do Cabeçalho
+  Local oModelCabec := oModel:GetModel('SZ7MASTER')
+
+  // Capturando os valores que estão no cabeçalho através do método GetValue
+  Local cFillSZ7    := oModelCabec:GetValue('Z7_FILIAL')
+  Local cNum        := oModelCabec:GetValue('Z7_NUM')
+
+  Local cOption     := oModelCabec:GetOperation()
+
+  If cOption == MODEL_OPERATION_INSERT
+
+    DbSelectArea('SZ7')
+    SZ7->(DbSetOrder(1))
+
+    If SZ7->(DbSeek(cFillSZ7 + cNum))
+      Help(NIL, NIL, 'Escolha outro número de pedido', NIL, 'Este pedido/solicitação de compras já existe em nosso sistema', 1, 0, NIL, NIL, NIL, NIL, NIL, {'ATENÇÃO'})
+      lRet := .F.
+    Endif
+  Endif
+
+  RestArea(aArea)
   
 Return lRet
 
@@ -408,7 +433,7 @@ Return lRet
   /*/
 User Function GrvSZ7()
   Local aArea       := GetArea()
-  Local lRet        := .F.
+  Local lRet        := .T.
 
   // FWModelActive retorna a referência do último modelo utilizado
   Local oModel      := FWModelActive()
