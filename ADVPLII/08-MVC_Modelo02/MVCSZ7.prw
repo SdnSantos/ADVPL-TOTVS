@@ -77,19 +77,22 @@ Return aRotina
   /*/
 Static Function ModelDef()
   // Objeto responsavel pela estrutura Temporaria do cabecalho
-  Local oStCabec  := FWFormModelStruct():New()
+  Local oStCabec    := FWFormModelStruct():New()
 
   // Objeto responsavel pela estrutura dos itens
-  Local oStItens  := FWFormStruct(1, 'SZ7')
+  Local oStItens    := FWFormStruct(1, 'SZ7')
 
   // Chamada da função que validará o Cabeçalho (Master)
-  Local bVldPos   := {|| U_VldSZ7()}
+  Local bVldPos     := {|| U_VldSZ7()}
 
   // Chamada da função que validará a INCLUSÃO, ALTERAÇÃO e EXCLUSÃO dos itens
-  Local bVldCom   := {|| U_GrvSZ7()}
+  Local bVldCom     := {|| U_GrvSZ7()}
 
   //                                              /*bPre*/, /*bPos*/, /*bCommit*/, /*bCancel*/
-  Local oModel    := MPFormModel():New('MVCSZ7M', /*bPre*/, bVldPos, bVldCom, /*bCancel*/)
+  Local oModel      := MPFormModel():New('MVCSZ7M', /*bPre*/, bVldPos, bVldCom, /*bCancel*/)
+
+  Local aTrigQuant  := {}
+  Local aTrigPreco  := {}
 
   // Criacao da tabela temporaria que sera utilizada no cabecalho
   oStCabec:AddTable('SZ7', {'Z7_FILIAL', 'Z7_NUM', 'Z7_ITEM'}, 'Cabeçalho SZ7')
@@ -106,7 +109,7 @@ Static Function ModelDef()
     Nil,;                     // [08] B Bloco de código de validação when do campo
     {},;                      // [09] A Lista de valores permitidos
     .F.,;                     // [10] L Indica se o campo tem preenchimento obrigatório
-    FwBuildFeature( STRUCT_FEATURE_INIPAD, 'IIF(!INCLUI, SZ7->Z7_FILIAL, FWxFilial("SZ7"))'),;     // [11] B Bloco de código de inicialização do campo
+    FwBuildFeature( STRUCT_FEATURE_INIPAD, 'IIF(!INCLUI, SZ7->Z7_FILIAL, FWxFilial("SZ7"))'),;                         // [11] B Bloco de código de inicialização do campo
     .T.,;                     // [12] L Indica se trata-se de um campo chave
     .F.,;                     // [13] L Indica se o campo não pode receber valor em uma operação de update
     .F.,;                     // [14] L Indica se o campo é virtual
@@ -123,9 +126,9 @@ Static Function ModelDef()
     Nil,;                    // [08]  B   Code-block de valida??o When do campo
     {},;                     // [09]  A   Lista de valores permitido do campo
     .F.,;                    // [10]  L   Indica se o campo tem preenchimento obrigatório
-    FwBuildFeature( STRUCT_FEATURE_INIPAD, "Iif(!INCLUI, SZ7->Z7_NUM, GetSXENum('SZ7','Z7_NUM'))" ),;        // [11]  B  Code-block de inicializacao do campo
+    FwBuildFeature( STRUCT_FEATURE_INIPAD, "Iif(!INCLUI,SZ7->Z7_NUM,GETSXENUM('SZ7','Z7_NUM'))" ),;                        // [11]  B   Code-block de inicializacao do campo
     .T.,;                    // [12]  L   Indica se trata-se de um campo chave
-    .F.,;                    // [13]  L   Indica se o campo pode receber valor em uma opera??o de update.
+    .F.,;                    // [13]  L   Indica se o campo pode receber valor em uma operação de update.
     .F.)                     // [14]  L   Indica se o campo virtual
 
   oStCabec:AddField(;
@@ -202,9 +205,78 @@ Static Function ModelDef()
   oStItens:SetProperty('Z7_FORNECE',  MODEL_FIELD_INIT, FwBuildFeature(STRUCT_FEATURE_INIPAD, '"*"'))
   oStItens:SetProperty('Z7_LOJA',     MODEL_FIELD_INIT, FwBuildFeature(STRUCT_FEATURE_INIPAD, '"*"'))
   
+  // FwStruTrigger monta o bloco de código da Trigger
+  aTrigQuant  := FwStruTrigger(    ;
+    'Z7_QUANT'                    ,; // Campo que dispara o gatilho
+    'Z7_TOTAL'                    ,; // Campo que irá receber o conteúdo do gartilho
+    'M->Z7_QUANT * M->Z7_PRECO'   ,; // Lógica do gatilho
+    .F.                            ; // Posiciona? .T. = Sim, .F. = Não
+  )
+
+  aTrigPreco  := FwStruTrigger(    ;
+    'Z7_PRECO'                    ,; // Campo que dispara o gatilho
+    'Z7_TOTAL'                    ,; // Campo que irá receber o conteúdo do gartilho
+    'M->Z7_QUANT * M->Z7_PRECO'   ,; // Lógica do gatilho
+    .F.                            ; // Posiciona? .T. = Sim, .F. = Não
+  )
+
+  // Adiciona a Trigger a estrutura de itens
+  oStItens:AddTrigger(   ;
+    aTrigQuant[1]       ,;
+    aTrigQuant[2]       ,;
+    aTrigQuant[3]       ,;
+    aTrigQuant[4]        ;
+  )
+
+  oStItens:AddTrigger(   ;
+    aTrigPreco[1]       ,;
+    aTrigPreco[2]       ,;
+    aTrigPreco[3]       ,;
+    aTrigPreco[4]        ;
+  )
+
   // Unindo as estruturas, vinculando o cabecalho com os itens
   oModel:AddFields('SZ7MASTER',, oStCabec)
   oModel:AddGrid('SZ7DETAIL','SZ7MASTER',oStItens)
+
+  // Adicionando Totalizadores
+  oModel:AddCalc(          ;
+    'SZ7TOTAIS'           ,; // Modelo
+    'SZ7MASTER'           ,; // Master
+    'SZ7DETAIL'           ,; // Detail
+    'Z7_PRODUTO'          ,; // Campo calculado
+    'QTDPROD'             ,; // Nome personalizado
+    'COUNT'               ,; // Operação
+                          ,;
+                          ,; 
+    'Número de Produtos'   ; // Nome do totalizador
+    )
+
+    oModel:AddCalc(          ;
+    'SZ7TOTAIS'           ,; // Modelo
+    'SZ7MASTER'           ,; // Master
+    'SZ7DETAIL'           ,; // Detail
+    'Z7_QUANT'            ,; // Campo calculado
+    'QTDITENS'            ,; // Nome personalizado
+    'SUM'                 ,; // Operação
+                          ,;
+                          ,; 
+    'Qtd de Itens'         ; // Nome do totalizador
+    )
+
+    oModel:AddCalc(        ;
+    'SZ7TOTAIS'           ,; // Modelo
+    'SZ7MASTER'           ,; // Master
+    'SZ7DETAIL'           ,; // Detail
+    'Z7_TOTAL'            ,; // Campo calculado
+    'TOTAL'               ,; // Nome personalizado
+    'SUM'                 ,; // Operação
+                          ,;
+                          ,; 
+    'Total'                ; // Nome do totalizador
+    )
+
+
 
   // Relacionamento do cabecalho com os itens, qual ou quais campos o grid esta vinculado com o cabecalho
   oModel:SetRelation('SZ7DETAIL', {{'Z7_FILIAL', 'Iif(!INCLUI, SZ7->Z7_FILIAL, FWxFilial("SZ7"))'}, {'Z7_NUM', 'SZ7->Z7_NUM'}}, SZ7->(IndexKey(1)) )
@@ -244,6 +316,9 @@ Static Function ViewDef()
 
   // Objeto encarregado de montar a parte de estrutura dos itens/grid
   Local oStItens  := FWFormStruct(2, 'SZ7')
+
+  // Criar estrutura para totalizadores
+  Local oStTotais := FWCalcStruct(oModel:GetModel('SZ7TOTAIS'))
 
   // Criação dos campos do cabeçalho dentro da estrutura View
   oStCabec:AddField(;
@@ -357,6 +432,10 @@ Static Function ViewDef()
   oStItens:RemoveField('Z7_LOJA')
   oStItens:RemoveField('Z7_USER')
 
+  // Bloqueando a edição dos campos ITEM e TOTAL pois são preenchidos automaticamente
+  oStItens:SetProperty('Z7_ITEM',   MVC_VIEW_CANCHANGE, .F.)
+  oStItens:SetProperty('Z7_TOTAL',  MVC_VIEW_CANCHANGE, .F.)
+
   // Instanciando a view
   oView := FWFormView():New()
 
@@ -365,19 +444,26 @@ Static Function ViewDef()
 
   // Criação da estrutura de visualização do Master e Detail (Cabeçalho e Item)
   oView:AddField('VIEW_SZ7M', oStCabec, 'SZ7MASTER')
-  oView:AddGrid('VIEW_SZ7D', oStItens, 'SZ7DETAIL')
+  oView:AddGrid('VIEW_SZ7D', oStItens,  'SZ7DETAIL')
+  oView:AddField('VIEW_SZ7T', oStTotais, 'SZ7TOTAIS')
+
+  // Incrementar numeração
+  oView:AddIncrementField('SZ7DETAIL', 'Z7_ITEM')
 
   // Criação da tela
-  oView:CreateHorizontalBox('MASTER', 30)
-  oView:CreateHorizontalBox('DETAIL', 70)
+  oView:CreateHorizontalBox('MASTER', 20)
+  oView:CreateHorizontalBox('DETAIL', 60)
+  oView:CreateHorizontalBox('ROTAPE', 20)
 
   // Relacionar as partes da tela criada com suas estruturas
   oView:SetOwnerView('VIEW_SZ7M', 'MASTER')
   oView:SetOwnerView('VIEW_SZ7D', 'DETAIL')
+  oView:SetOwnerView('VIEW_SZ7T', 'ROTAPE')
 
   // Setar os títulos
   oView:EnableTitleView('VIEW_SZ7M', 'Cabeçalho Solicitação de Compras')
   oView:EnableTitleView('VIEW_SZ7D', 'Itens das Solicitações de Compras')
+  oView:EnableTitleView('VIEW_SZ7T', 'Rotapé das Solicitações de Compras')
 
   // Método que seta um bloco de código para verificar se a janela deve ou não 
   // ser fechada após a execução do botão OK. 
