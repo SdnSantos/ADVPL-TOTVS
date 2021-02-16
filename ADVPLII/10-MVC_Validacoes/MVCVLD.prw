@@ -71,11 +71,13 @@ Return aMenu
   @version 1.0  
   /*/
 Static Function ModelDef()
-  Local oModel := MPFormModel():New('MVCVLDM'                        ,;
-                                    { |oModel| MPreVld(oModel) }     ,; // bPre  
-                                    /*bPos*/                         ,;
-                                    /*bCommit*/                      ,;
-                                    /*bCancel*/                       ;
+  Local oModel := MPFormModel():New('MVCVLDM'                                   ,;
+  /* pré-validação funciona conforme vai preenchendo campo a campo */            ;
+                                    /* { |oModel| MPreVld(oModel) } */          ,; // bPre  
+  /* pós-validação funciona quando for confirmar uma inserção ou alteração */    ;
+                                    { |oModel| MPosVld(oModel) }                ,; // bPos
+                                    /*bCommit*/                                 ,;
+                                    /*bCancel*/                                  ;
   )
 
   // Criação das estruturas das tabelas
@@ -225,7 +227,7 @@ Static Function MActivVld(oModel)
 Return lRet
 
 /*/{Protheus.doc} MPreVld(
-  Função de teste da pr?-valida??o do modelo
+  Função de teste da pré-validação do modelo
   @type  Function
   @author Sistematizei
   @since 15/02/2021
@@ -238,6 +240,28 @@ Local lRet := .T.
   If oModel:GetValue('SZ2MASTER', 'Z2_DATA') > dDatabase
     Help(NIL, NIL, 'MPreVld', NIL, 'Usuário sem permissão', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
     {'Não pode incluir com data maior que a database!'})
+    lRet := .F.
+  Endif
+  
+Return lRet
+
+/*/{Protheus.doc} MPosVld(
+  Função de teste da pós-validação do modelo
+  @type  Function
+  @author Sistematizei
+  @since 16/02/2021
+  @version 1.0
+  @param oModel, object, objeto do modelo 
+  /*/
+Static Function MPosVld(oModel)
+Local lRet          := .T.
+//                        MODELO        SUBMODELO    CAMPO
+Local cTitChamado   := oModel:GetValue('SZ2MASTER', 'Z2_TITCHAM')
+Local nLenTit       := Len(Alltrim(cTitChamado))
+
+  If nLenTit < 15
+    Help(NIL, NIL, 'MPosVld', NIL, 'Título de preguiçoso!', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
+    {'Por favor, o título do chamado tem que ter no mínimo 15 caracteres!'})
     lRet := .F.
   Endif
   
