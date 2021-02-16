@@ -76,7 +76,8 @@ Static Function ModelDef()
                                     /* { |oModel| MPreVld(oModel) } */          ,; // bPre  
   /* pós-validação funciona quando for confirmar uma inserção ou alteração */    ;
                                     { |oModel| MPosVld(oModel) }                ,; // bPos
-                                    /*bCommit*/                                 ,;
+  /* commit funciona para validar o salvamento ou alteração do modelo */         ;
+                                    { |oModel| MComVld(oModel) }                ,; // bCommit
                                     /*bCancel*/                                  ;
   )
 
@@ -266,3 +267,20 @@ Local nLenTit       := Len(Alltrim(cTitChamado))
   Endif
   
 Return lRet
+
+/*/{Protheus.doc} MComVld(
+  Função de teste do commit do modelo
+  @type  Function
+  @author Sistematizei
+  @since 16/02/2021
+  @version 1.0
+  @param oModel, object, objeto do modelo 
+  /*/
+Static Function MComVld(oModel)
+Local lRet          := .T.
+//                        MODELO        SUBMODELO    CAMPO
+
+  Alert('Você está passando pela validação de COMMIT')
+  FwFormCommit(oModel)
+  
+Return .T.
