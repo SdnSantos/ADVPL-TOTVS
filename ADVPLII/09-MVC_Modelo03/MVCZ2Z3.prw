@@ -109,6 +109,7 @@ Static Function ViewDef()
   Local oStFilhoZ3  := FWFormStruct(2, 'SZ3')
 
   oStFilhoZ3:RemoveField('Z3_CHAMADO')
+  
 
   oStFilhoZ3:SetProperty('Z3_CODIGO', MVC_VIEW_CANCHANGE, .F.)
 
