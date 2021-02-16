@@ -73,12 +73,13 @@ Return aMenu
 Static Function ModelDef()
   Local oModel := MPFormModel():New('MVCVLDM'                                   ,;
   /* pré-validação funciona conforme vai preenchendo campo a campo */            ;
-                                    /* { |oModel| MPreVld(oModel) } */          ,; // bPre  
+                                    { |oModel| MPreVld(oModel) }                ,; // bPre  
   /* pós-validação funciona quando for confirmar uma inserção ou alteração */    ;
                                     { |oModel| MPosVld(oModel) }                ,; // bPos
   /* commit funciona para validar o salvamento ou alteração do modelo */         ;
                                     { |oModel| MComVld(oModel) }                ,; // bCommit
-                                    /*bCancel*/                                  ;
+  /* cancel validará se vai sair da tela mesmo, ativará no botão cancel */       ;
+                                    { |oModel| MCancVld(oModel) }                ; // bCancel
   )
 
   // Criação das estruturas das tabelas
@@ -238,7 +239,7 @@ Return lRet
 Static Function MPreVld(oModel)
 Local lRet := .T.
 
-  If oModel:GetValue('SZ2MASTER', 'Z2_DATA') > dDatabase
+  If oModel:GetValue('SZ2MASTER', 'Z2_DATA') > Date()
     Help(NIL, NIL, 'MPreVld', NIL, 'Usuário sem permissão', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
     {'Não pode incluir com data maior que a database!'})
     lRet := .F.
@@ -268,7 +269,7 @@ Local nLenTit       := Len(Alltrim(cTitChamado))
   
 Return lRet
 
-/*/{Protheus.doc} MComVld(
+/*/{Protheus.doc} MComVld
   Função de teste do commit do modelo
   @type  Function
   @author Sistematizei
@@ -277,10 +278,29 @@ Return lRet
   @param oModel, object, objeto do modelo 
   /*/
 Static Function MComVld(oModel)
-Local lRet          := .T.
-//                        MODELO        SUBMODELO    CAMPO
+Local lRet := .T.
 
   Alert('Você está passando pela validação de COMMIT')
   FwFormCommit(oModel)
+  
+Return .T.
+
+/*/{Protheus.doc} MCancVld
+  Função de teste do cancel do modelo
+  @type  Function
+  @author Sistematizei
+  @since 16/02/2021
+  @version 1.0
+  @param oModel, object, objeto do modelo 
+  /*/
+Static Function MCancVld(oModel)
+Local lRet := .T.
+
+  Alert('Você está passando pela validação de CANCEL')
+  If !MsgYesNo('Tem certeza que deseja sair da tela?')
+    Help(NIL, NIL, 'MCancVld', NIL, 'CANCEL', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
+    {'Saída/Cancelamento abortado pelo usuário!'})
+    lRet := .F.
+  EndIf
   
 Return .T.
