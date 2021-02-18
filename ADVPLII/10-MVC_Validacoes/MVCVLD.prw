@@ -73,7 +73,7 @@ Return aMenu
 Static Function ModelDef()
   Local oModel := MPFormModel():New('MVCVLDM'                                   ,;
   /* pré-validação funciona conforme vai preenchendo campo a campo */            ;
-                                    { |oModel| MPreVld(oModel) }                ,; // bPre  
+                                 /* { |oModel| MPreVld(oModel) } */             ,; // bPre  
   /* pós-validação funciona quando for confirmar uma inserção ou alteração */    ;
                                     { |oModel| MPosVld(oModel) }                ,; // bPos
   /* commit funciona para validar o salvamento ou alteração do modelo */         ;
@@ -236,16 +236,18 @@ Return lRet
   @version 1.0
   @param oModel, object, objeto do modelo 
   /*/
-Static Function MPreVld(oModel)
-Local lRet := .T.
-
-  If oModel:GetValue('SZ2MASTER', 'Z2_DATA') > Date()
-    Help(NIL, NIL, 'MPreVld', NIL, 'Usuário sem permissão', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
-    {'Não pode incluir com data maior que a database!'})
-    lRet := .F.
-  Endif
+// Static Function MPreVld(oModel)
+// Local lRet    := .T.
+// Local oField  := oModel:GetModel('SZ2MASTER')
+// Local dData   := oField:GetValue('Z2_DATA')
+ 
+//   If dData > dDatabase
+//     Help(NIL, NIL, 'MPreVld', NIL, 'Usuário sem permissão', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
+//     {'Não pode incluir com data maior que a database!'})
+//     lRet := .F.
+//   Endif
   
-Return lRet
+// Return lRet
 
 /*/{Protheus.doc} MPosVld(
   Função de teste da pós-validação do modelo
@@ -297,7 +299,7 @@ Static Function MCancVld(oModel)
 Local lRet := .T.
 
   Alert('Você está passando pela validação de CANCEL')
-  If !MsgYesNo('Tem certeza que deseja sair da tela?')
+  If MsgYesNo('Tem certeza que deseja sair da tela?')
     Help(NIL, NIL, 'MCancVld', NIL, 'CANCEL', 1, 0, NIL, NIL, NIL, NIL, NIL,; 
     {'Saída/Cancelamento abortado pelo usuário!'})
     lRet := .F.
