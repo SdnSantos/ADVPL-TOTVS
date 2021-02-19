@@ -1,13 +1,13 @@
 #Include 'Totvs.ch'
 
 /*/{Protheus.doc} User Function ITEM
-  PE no cadastro de Produtos
+  Ponto de entrada no Cadastro de Produtos (MATA010)
   @type  Function
   @author user
   @since 18/02/2021
   @version 1.0
   /*/
-User Function ITEM(param_name)
+User Function ITEM()
   /*
     Parâmetro obrigatório nos PEs em MVC, pois eles trazem consigo informações 
     importantes sobre o estado e ponto de execução da rotina.
@@ -82,8 +82,5 @@ User Function ITEM(param_name)
     Endif
 
   Endif
- 
-
-
 
 Return xRet
